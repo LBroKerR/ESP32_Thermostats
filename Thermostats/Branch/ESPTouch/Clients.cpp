@@ -9,7 +9,7 @@ Clients::Clients(){
    
 Clients::~Clients(){
     if(IPs!=nullptr){
-        delete[] IPs;
+      delete[] IPs;
     }
     if(ids!=nullptr){
       delete[] ids;
@@ -69,6 +69,7 @@ int Clients::Del(String param){
         if(size>1){
             tmp=new String[size-1];
             utmp=new unsigned[size-1];
+             status_tmp=new bool[size-1];
             for (unsigned i = 0; i < size-1; i++){
                 if(place>i){
                     tmp[i]=IPs[i];

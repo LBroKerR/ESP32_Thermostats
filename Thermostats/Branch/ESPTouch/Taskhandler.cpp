@@ -1,6 +1,7 @@
 #include "Taskhandler.h"
 
 DataHandler Taskhandler::data;
+bool Taskhandler::end_task_on_core_0;
 Taskhandler::Taskhandler(){
     //data=new DataHandler();
     myQueue1 = xQueueCreate(NUMBER_OF_TASKS_CORE1, sizeof(TaskHandle_t));
@@ -34,16 +35,19 @@ void Taskhandler::BIOSTask(void*parameters){
 void Taskhandler::Guitask(void*parameters){
   QueueHandle_t Queue=*(QueueHandle_t*)parameters;
   TaskHandle_t receivedTaskHandle;
+  
   if (xQueueReceive(Queue, &receivedTaskHandle, portMAX_DELAY) == pdTRUE ) {
     // Code comes here!
+    end_task_on_core_0=false;
     MainTask *update=new MainTask(SCREENS);
     update->setSensor_Location(&data);
     if(data.getHeater()->getHeatingCircleHandler()[update->getSensorLocation()].getSensor()!=nullptr){
       TaskHandle_t core0;
       xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 10000, update, 5, &core0, 0);
       GuiTask_main(update, &data);
-      delete update;
+      end_task_on_core_0=true;
       vTaskDelete(core0);
+      delete update;
     }
   }
   TaskHandle_t taskHandle = xTaskGetCurrentTaskHandle();
@@ -67,20 +71,22 @@ void Taskhandler::initTask(void*parameters){
 
 void Taskhandler::OtherTasks(void*parameters){
   //measure, wifi, autosave
- // Serial.begin(115200);
   MainTask *measuring=(MainTask*)parameters;
   DHT sensor(DHTPIN,DHTTYPE);
   sensor.begin();
   InitTask *autoSave=new InitTask();
- wifiTask wifi(&data);
+  wifiTask wifi(&data);
   ESP32Time rtc;
   rtc.setTime(1, data.getTime()->getmin(), data.getTime()->gethour(), DAY, MONTH, YEAR);
          //          s   m   h+1  d    m      y
-  while(true){
+  while(!end_task_on_core_0){
     measuring->measuring(&data, &sensor, &rtc);
     wifi.main();
     autoSave->save(&data);
     data.getHeater()->Communicate_with_PLC(data.getProg()->get_Wanted_temp());
+    vTaskDelay(100 / portTICK_PERIOD_MS);
+  }
+  while(true){
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
   vTaskDelete(nullptr);

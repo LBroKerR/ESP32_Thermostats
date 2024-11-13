@@ -18,11 +18,9 @@ HTML_page::HTML_page(String HEAD){
 HTML_page::~HTML_page(){
     if(list!=nullptr){
         delete[] list;
-        number_of_listelem=0;
     }
     if(data!=nullptr){
         delete[] data;
-        number_of_tags=0;
     }
 }
 

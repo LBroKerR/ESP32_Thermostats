@@ -104,7 +104,7 @@ bool MainTask::update_progindex_roller(DataHandler*data){
     lv_roller_set_selected(ui_Roller1, (uint16_t) data->getProg()->get_active_program_index(), LV_ANIM_OFF);
     output=true;
   }
-   if(data->getProg()->get_active_program_index()!=lv_roller_get_selected(ui_Roller1) && !data->getProg()->get_active_program_index_changed()){
+   if(data->getProg()->get_active_program_index()!=lv_roller_get_selected(ui_Roller1)){ //&& !data->getProg()->get_active_program_index_changed()){
     //user interaction
     // set server_prog_index to true
     //set prog_index_changed to true

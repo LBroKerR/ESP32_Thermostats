@@ -28,6 +28,8 @@ class Taskhandler{
     QueueHandle_t myQueue1;
     TaskHandle_t core1;
 
+    static bool end_task_on_core_0;
+
 public:
 	Taskhandler();
     ~Taskhandler();
