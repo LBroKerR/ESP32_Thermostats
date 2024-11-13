@@ -19,6 +19,8 @@ class Taskhandler{
     static DataHandler data;
     QueueHandle_t myQueue1;
     TaskHandle_t core1;
+
+    static bool core_0_task_disable;
 public:
 	Taskhandler();
     ~Taskhandler();

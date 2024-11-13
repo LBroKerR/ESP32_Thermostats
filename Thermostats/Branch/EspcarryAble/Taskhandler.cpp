@@ -1,9 +1,11 @@
 #include "Taskhandler.h"
 
 DataHandler Taskhandler::data;
+bool Taskhandler::core_0_task_disable;
 Taskhandler::Taskhandler(){
     //data=new DataHandler();
     myQueue1 = xQueueCreate(NUMBER_OF_TASKS_CORE1, sizeof(TaskHandle_t));
+    core_0_task_disable=false;
    // myQueue0 = xQueueCreate(NUMBER_OF_TASKS_CORE0, sizeof(TaskHandle_t));
 }
 Taskhandler::~Taskhandler(){
@@ -46,6 +48,7 @@ void Taskhandler::Maintask(void*parameters){
     delay(100);
     delete Task;
     delay(100);
+    core_0_task_disable=true;
     vTaskDelete(core0);
   }
   TaskHandle_t taskHandle = xTaskGetCurrentTaskHandle();
@@ -73,7 +76,7 @@ void Taskhandler::OtherTasks(void*parameters){
       Serial.begin(115200);
         wifiTask wifi(&data);
         InitTask task;
-      while(true){
+      while(!core_0_task_disable){
         wifi.main();
         task.save(&data);
         vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -81,7 +84,7 @@ void Taskhandler::OtherTasks(void*parameters){
       Serial.end();
     }
     while(true){
-      vTaskDelay(10 / portTICK_PERIOD_MS);
+      vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 
