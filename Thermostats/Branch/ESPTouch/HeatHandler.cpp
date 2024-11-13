@@ -97,7 +97,7 @@ bool HeatHandler::remove_HeatingCircles(unsigned index){
     if(HeatingCircles==nullptr || number_of_HeatingCircles==0 || status==nullptr){
         return false;
     }
-    if(index> 0 && index< number_of_HeatingCircles){
+    if(index> 1 && index< number_of_HeatingCircles){
         HeatingCircleHandler* tmp=new HeatingCircleHandler[number_of_HeatingCircles-1];
         bool *tmpStatus=new bool[number_of_HeatingCircles-1];
         for(unsigned i=0; i< number_of_HeatingCircles-1; i++){
@@ -149,8 +149,10 @@ void HeatHandler::remove_device_from_HeatingCircles(String ip){
         return;
     }
     for(unsigned i=0; i<number_of_HeatingCircles; i++){
-        if(HeatingCircles[i].removeDevice(ip)){
-            break;
+        if(HeatingCircles[i].getDevices()!=nullptr){
+            if(HeatingCircles[i].removeDevice(ip)){
+                break;
+            }
         }
     }
 }

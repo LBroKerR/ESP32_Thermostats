@@ -50,7 +50,13 @@ bool Clients::add(String param, unsigned id, bool state){
 }
 int Clients::Del(String param){
     int place=-1;
-    String *tmp=nullptr;
+    if(IPs==nullptr || ids== nullptr || status==nullptr || size==0){
+        delete[] IPs;
+        delete[] ids;
+        delete[] status;
+        size=0;
+        return place;
+    }
     for(unsigned i=0; i<size; i++){
         if(param==IPs[i]){
             place=i;
@@ -59,6 +65,7 @@ int Clients::Del(String param){
     if(place>-1 ){
         String *tmp=nullptr;
         unsigned *utmp=nullptr;
+        bool* status_tmp=nullptr;
         if(size>1){
             tmp=new String[size-1];
             utmp=new unsigned[size-1];
@@ -66,17 +73,22 @@ int Clients::Del(String param){
                 if(place>i){
                     tmp[i]=IPs[i];
                     utmp[i]=ids[i];
+                    status_tmp[i]=status[i];
+
                 }
                 else if(place<=i){
                     tmp[i]=IPs[i+1];
                     utmp[i]=ids[i+1];
+                    status_tmp[i]=status[i+1];
                 }
             }
         }
         delete[] IPs;
         delete[] ids;
+        delete[] status;
         IPs=tmp;
         ids=utmp;
+        status=status_tmp;
         size--;
     }
     return place;

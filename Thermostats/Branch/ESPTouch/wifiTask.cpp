@@ -85,9 +85,9 @@ void wifiTask::client_server_activity_check(){
         for(unsigned i=0; i<server->get_Clients()->getSize(); i++){
             if(server->get_Clients()->get_ids()!=nullptr && server->get_Clients()->get()!=nullptr && server->get_Clients()->get_status()!=nullptr){
                 if(server->get_Clients()->get_status()[i]==false){
-                    //server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]);
-                   //data->getHeater()->remove_device_from_HeatingCircles(server->get_Clients()->get()[i]);
-                    //server->get_Clients()->Del(server->get_Clients()->get()[i]);
+                    server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]);
+                   data->getHeater()->remove_device_from_HeatingCircles(server->get_Clients()->get()[i]);
+                    server->get_Clients()->Del(server->get_Clients()->get()[i]);
                 }
             }
         }
@@ -171,8 +171,10 @@ void wifiTask::main(){
   //send data if something changed
 if(data->get_wifi_data()->get_switch()){
     if ((millis() - lastTime) > timerDelay) {
-        set_Json_messages();
-        server->updata();
+        if(server->get_Clients()!=nullptr){
+            set_Json_messages();
+            server->updata();
+        }
         lastTime = millis();
     }
       if(!function_selector){
