@@ -81,8 +81,9 @@ bool HeatHandler::add_HeatingCircles(){
 }
 
 bool HeatHandler::add_HeatingCircles(unsigned number){
-    if(HeatingCircles!=nullptr){
+    if(HeatingCircles!=nullptr && status!=nullptr){
         delete[] HeatingCircles;
+        delete[] status;
     }
     number_of_HeatingCircles= number;
     HeatingCircles=new HeatingCircleHandler[number_of_HeatingCircles];

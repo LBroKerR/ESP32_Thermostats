@@ -96,7 +96,7 @@ void wifiTask::client_server_activity_check(){
 
 void wifiTask::set_active_prog(String str){
     if(str!=""){
-        data->getProg()->set_received_index(str.toInt());
+        data->getProg()->set_received_index(str.toInt(), data->getTime()->gethour());
     }
 }
 void wifiTask::set_wtmp(String str){

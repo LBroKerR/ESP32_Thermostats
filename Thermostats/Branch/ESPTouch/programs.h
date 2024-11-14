@@ -41,7 +41,7 @@ public:
     void set_programs(double* param, unsigned const index);
     bool set_program_element( unsigned hour, float data);
     bool set_program_element( float data);
-    void set_received_index(unsigned prog);
+    void set_received_index(unsigned prog, unsigned);
     void set_received_wtmp(float param);
 
     void set_active_program_index_changed(bool const);
