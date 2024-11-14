@@ -150,8 +150,8 @@ void MyServer::onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, Aws
   switch (type) {
     case WS_EVT_CONNECT:{
       //Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
-      if(clients->add(client->remoteIP().toString(),client->id(),true)){
-        if(check_ip_host(client->remoteIP())){
+      if(check_ip_host(client->remoteIP())){
+        if(clients->add(client->remoteIP().toString(),client->id(),true)){
           get_Page()->add_list_elem(client->remoteIP().toString().c_str(),+client->remoteIP().toString().c_str());
           new_client=true;
         }

@@ -38,14 +38,13 @@ void MainTask::update_wtmp(DataHandler*data){
     tmp=String(data->getProg()->get_Wanted_temp(),1)+" °C";
     lv_label_set_text(ui_WtmpLabel, tmp.c_str());*/
 
-    if(data->getProg()->get_wtmp_changed()){//auto
+  if(auto_flag){//auto
+    data->getProg()->set_Wanted_temp(data->getProg()->get_program_element(data->getTime()->gethour()));
     lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0));
-    data->getProg()->set_wtmp_changed(false);
-    if(data->getProg()->get_program_element(data->getTime()->gethour())==data->getProg()->get_Wanted_temp()){
-      lv_label_set_text(ui_AutoManual, "Auto");
-    }
+    lv_label_set_text(ui_AutoManual, "Auto");
+    auto_flag=false;
   }
-  else if(data->getProg()->get_Wanted_temp()!=(float)((lv_arc_get_value(ui_WtmpARC))/10.0)){//manual
+  if(data->getProg()->get_Wanted_temp()!=(float)((lv_arc_get_value(ui_WtmpARC))/10.0)){//manual
     data->getProg()->set_Wanted_temp((float)(lv_arc_get_value(ui_WtmpARC))/10.0);
       lv_label_set_text(ui_AutoManual, "Manual");
   }
@@ -133,10 +132,7 @@ bool MainTask::update_proghour_roller(DataHandler*data){
     return true;
   }
   else{
-    data->getProg()->set_Wanted_temp(data->getProg()->get_program_element());
-    data->getProg()->set_Wanted_temp(data->getProg()->get_program_element(data->getTime()->gethour()));
-      lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0)); 
-      lv_label_set_text(ui_AutoManual, "Auto");
+    auto_flag=true;
   }
   return false;
 }
@@ -150,8 +146,8 @@ bool MainTask::update_progindex_slider(DataHandler* data){
     str=String(data->getProg()->get_program_element(),1)+" °C";
     lv_label_set_text(ui_WTMPSliderLable, str.c_str());
     output=true;
-  }else{
-  //if(data->getProg()->get_program_element()!=((float)lv_slider_get_value(ui_wtmpSLider)/10.0)){
+  }
+  else if(data->getProg()->get_program_element()!=((float)lv_slider_get_value(ui_wtmpSLider)/10.0)){
     data->getProg()->set_program_element((float)lv_slider_get_value(ui_wtmpSLider)/10.0);
     str=String(data->getProg()->get_program_element(),1)+" °C";
     lv_label_set_text(ui_WTMPSliderLable, str.c_str());
@@ -160,6 +156,7 @@ bool MainTask::update_progindex_slider(DataHandler* data){
   return output;
 }
 void MainTask::upgrade_Screen2(DataHandler*data, lv_chart_series_t * ui_TmpChart_series_1){//prog -> active prog, chart, slider
+ data->getProg()->set_active_program_index_changed(true);
  bool update_index=update_progindex_roller(data);
  bool update_hour=update_proghour_roller(data);
  bool update_hour_temp_value=update_progindex_slider(data);
