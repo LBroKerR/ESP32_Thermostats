@@ -38,6 +38,25 @@ function onClose(event) {
 }
 
 // Function that receives the message from the ESP32 with the readings
+//new
+function onMessage(event) {
+    console.log(event.data);
+    var myObj = JSON.parse(event.data);
+
+    // existing variable will be setted via Json msg. 
+    Object.keys(myObj).forEach(key => {
+        var element = document.getElementById(key);
+        if (element) {
+            element.innerHTML = myObj[key];
+        }
+    });
+}
+)rawliteral";
+
+    return str;
+}
+
+/* old
 function onMessage(event) {
     console.log(event.data);
     var myObj = JSON.parse(event.data);
@@ -48,7 +67,4 @@ function onMessage(event) {
         document.getElementById(key).innerHTML = myObj[key];
     }
 }
-)rawliteral";
-
-    return str;
-}
+*/

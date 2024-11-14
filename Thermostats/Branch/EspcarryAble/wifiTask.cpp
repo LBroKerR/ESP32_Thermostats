@@ -113,6 +113,7 @@ void wifiTask::main(){
     if ((millis() - lastTime) > timerDelay) {
         set_Json_messages();
         server->Client_update();
+        set_Json_messages();
         server->updata();
         lastTime = millis();
     }
