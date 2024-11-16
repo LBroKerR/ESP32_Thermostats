@@ -111,7 +111,7 @@
     void programs::set_received_wtmp(float param){
         if(param>=MIN_TEMP && param<=MAX_TEMP){
             Wanted_temp=param;
-          //  set_wtmp_changed(true);
+            set_wtmp_changed(true);
         }
     }
 
