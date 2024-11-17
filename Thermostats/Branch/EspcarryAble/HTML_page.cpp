@@ -5,6 +5,8 @@ HTML_page::HTML_page(){
     number_of_listelem=0;
     data=nullptr;
     number_of_tags=0;
+    cssScript="null";
+    JavaScipt="null";
 
     head="<head><title>Null</title></head>";
 }
@@ -14,21 +16,24 @@ HTML_page::HTML_page(String HEAD){
     data=nullptr;
     number_of_tags=0;
     setHead(HEAD);
+    cssScript="null";
+    JavaScipt="null";
 }
 HTML_page::~HTML_page(){
     if(list!=nullptr){
         delete[] list;
-        number_of_listelem=0;
     }
     if(data!=nullptr){
         delete[] data;
-        number_of_tags=0;
     }
 }
 
 void HTML_page::setHead(String param){
     head=
-        "<head><title>"+ param +"</title></head>";
+        "<head><title>"+ param +"</title>"
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles.css\">"
+        "</head>";
 }
 void  HTML_page::add_tag(String param, String param2, String param3){
     if(data==nullptr || number_of_tags==0){
@@ -84,28 +89,31 @@ void  HTML_page::add_list_elem(String url, String text){
     list=tmp;
     number_of_listelem++;
 }
-void  HTML_page::remove_list_elem(uint32_t param){
-    if(param > (uint32_t)number_of_listelem){
-        return;
-    }
+void  HTML_page::remove_list_elem(String param){
     if(list==nullptr || number_of_listelem==0){
         delete[] list;
         number_of_listelem=0;
         return;
     }
+    int index=-1;
+    for (unsigned i = 0; i < number_of_listelem; i++){
+        if(param==list[i].get_link()){
+            index=i;
+        }
+    }
     UnorderedList*tmp=nullptr;
-    if(param>(uint32_t)1){
-      tmp=new UnorderedList[number_of_listelem-1];
-      for(unsigned i=0; i< number_of_listelem-1; i++){
-          if(i<param){
+    if(index!=-1 && number_of_listelem>1){
+        tmp=new UnorderedList[number_of_listelem-1];
+        for(unsigned i=0; i< number_of_listelem-1; i++){
+          if(i<index){
               tmp[i]=list[i];
           }
-          else if(i>=param){
+          else if(i>=index){
               tmp[i]=list[i+1];
           }
-      }
-      delete[] list;
+        }
     }
+    delete[] list;
     list=tmp;
     number_of_listelem--;
 }
@@ -114,15 +122,23 @@ String HTML_page::get_page(){
     String str;
     str="<html>";
     str+=head;
-    str+="<body><div>";
-    for (unsigned i = 0; i < number_of_tags; i++){
-        str+=data[i].get_html_tag();
+    str+="<body><div class=\"content\">"
+    "<div class=\"card-grid\">";
+    for (unsigned i = 0; i < number_of_tags; i=i+2){
+        str+="<div class=\"card\">";
+        for (unsigned ii = i; ii < (i+2); ii++){
+            str+=data[ii].get_html_tag();
+        }
+        str+="</div>";
     }
-    str+="</div><div><ul>";
+    str+="</div></div>"
+    "<div class=\"card-grid\">"
+        "<div class=\"card\"><ul>";
     for (unsigned i = 0; i < number_of_listelem; i++){
         str+=list[i].get_html_link();
     }
-     str+="</ul></div><script src=\"script.js\"></script></body></html>";
+     str+="</ul></div></div>"
+     "<script src=\"script.js\"></script></body></html>";
     return str;
 }
 
@@ -131,5 +147,12 @@ void HTML_page::set_java_script(String param){
 }
 String HTML_page::get_java_script(){
   return JavaScipt;
+}
+
+void HTML_page::set_css(String param){
+    cssScript=param;
+}
+String HTML_page::get_css(){
+    return cssScript;
 }
 

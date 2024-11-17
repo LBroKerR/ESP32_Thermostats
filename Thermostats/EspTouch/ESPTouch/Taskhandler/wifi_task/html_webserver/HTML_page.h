@@ -15,6 +15,7 @@ class HTML_page{
     unsigned number_of_tags;
 
     String JavaScipt;
+    String cssScript;
 
     UnorderedList* list;
     unsigned number_of_listelem;
@@ -33,6 +34,9 @@ public:
 
     void set_java_script(String param);
     String get_java_script();
+
+    void set_css(String param);
+    String get_css();
 
 };
 #endif //HTML_PAGE_H

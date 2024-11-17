@@ -73,7 +73,7 @@ void Taskhandler::initTask(void*parameters){
 
 void Taskhandler::OtherTasks(void*parameters){
     if(data.get_wifi_data()->get_switch()){
-      Serial.begin(115200);
+     // Serial.begin(115200);
         wifiTask wifi(&data);
         InitTask task;
       while(!core_0_task_disable){
@@ -81,7 +81,7 @@ void Taskhandler::OtherTasks(void*parameters){
         task.save(&data);
         vTaskDelay(10 / portTICK_PERIOD_MS);
       }
-      Serial.end();
+      //Serial.end();
     }
     while(true){
       vTaskDelay(100 / portTICK_PERIOD_MS);

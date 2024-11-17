@@ -9,6 +9,7 @@
 #include "DataHandler.h"
 #include "MyServer.h"
 #include "JavaScript.h"
+#include "styles.h"
 
 #define TITLE "ESPTouch"
 

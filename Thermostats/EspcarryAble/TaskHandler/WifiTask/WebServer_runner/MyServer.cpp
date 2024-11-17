@@ -26,12 +26,12 @@ MyServer::~MyServer(){
 void MyServer::Wifi_connection() {
     WiFi.begin(ssid.c_str(), pass.c_str());
     while (WiFi.status() != WL_CONNECTED) {
-        Serial.print("Connecting...");
+        //Serial.print("Connecting...");
         delay(500);
     }
-    Serial.print("Connected");
-    Serial.print("Local IP: ");
-    Serial.println(WiFi.localIP());
+    //Serial.print("Connected");
+    //Serial.print("Local IP: ");
+    //Serial.println(WiFi.localIP());
 }
 
 // Szerver indítása
@@ -45,10 +45,14 @@ webSocket.onEvent([this]( WStype_t type, uint8_t* payload, size_t length) {
     this->onEvent1( type, payload, length);
 });
   server.addHandler(&ws);
-  Serial.println("WebSocket initialized");
+  //Serial.println("WebSocket initialized");
   //html server initi
   server.on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
     request->send(200, "text/html", html_page());
+  });
+    server.on("/styles.css", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    String css=get_Page()->get_css();
+    request->send(200, "text/css", css); // CSS elküldése
   });
   server.on("/script.js", HTTP_GET, [this](AsyncWebServerRequest *request) {
     String js=get_Page()->get_java_script();
@@ -133,14 +137,14 @@ void MyServer::handleWebSocketMessage(void *arg, uint8_t *data, size_t len, Stri
       sensorReadings=String((char*)data);
       Data->add_msg(sensorReadings, ip);
     }
-    Serial.println("event"+sensorReadings);
+    //Serial.println("event"+sensorReadings);
   }
 }
 
 void MyServer::onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
   switch (type) {
     case WS_EVT_CONNECT:{
-      Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+     // Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
       if(check_ip_host(client->remoteIP())){
         if(clients->add(client->remoteIP().toString(),client->id())){
           get_Page()->add_list_elem(client->remoteIP().toString().c_str(),+client->remoteIP().toString().c_str());
@@ -150,10 +154,10 @@ void MyServer::onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, Aws
       break;
     case WS_EVT_DISCONNECT:{
     //gondold át újra, hogy a jót törölje!
-      Serial.printf("WebSocket client #%u disconnected\n", client->id());
+     // Serial.printf("WebSocket client #%u disconnected\n", client->id());
       int afk=clients->Del(client->remoteIP().toString());
         if(-1!=afk){
-          get_Page()->remove_list_elem(afk);
+          get_Page()->remove_list_elem(client->remoteIP().toString());
         }
     }
       break;
@@ -161,23 +165,23 @@ void MyServer::onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, Aws
       this->handleWebSocketMessage(arg, data, len,client->remoteIP().toString());
       break;
     case WS_EVT_PONG:
-      Serial.println("Received PONG from client");
+     // Serial.println("Received PONG from client");
       break;
     case WS_EVT_ERROR:
-      Serial.println("WebSocket error occurred.");
+     // Serial.println("WebSocket error occurred.");
       break;
   }
 }
 void  MyServer::onEvent1(WStype_t type, unsigned char* payload, size_t length) {
         switch (type) {
             case WStype_DISCONNECTED:
-                Serial.println("Disconnected from server");
+          //      Serial.println("Disconnected from server");
                 break;
             case WStype_CONNECTED:
-                Serial.println("Connected to server");
+          //      Serial.println("Connected to server");
                 break;
             case WStype_TEXT:{
-                Serial.printf("Message received: %s\n", payload);
+         //       Serial.printf("Message received: %s\n", payload);
                 String payloadString = String((char*)payload);
                 Data->add_msg(payloadString, "ip_null");
                 }

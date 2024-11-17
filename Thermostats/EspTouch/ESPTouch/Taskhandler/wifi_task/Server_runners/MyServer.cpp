@@ -47,17 +47,21 @@ void MyServer::Server_turning_on() {
   });
 webSocket.onEvent([this]( WStype_t type, uint8_t* payload, size_t length) {
     this->onEvent1( type, payload, length);
-});
+  });
   server.addHandler(&ws);
  // Serial.println("WebSocket initialized");
   //html server initi
   server.on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
     request->send(200, "text/html", html_page());
   });
+  server.on("/styles.css", HTTP_GET, [this](AsyncWebServerRequest *request) {
+    String css=get_Page()->get_css();
+    request->send(200, "text/css", css); // CSS elküldése
+  });
   server.on("/script.js", HTTP_GET, [this](AsyncWebServerRequest *request) {
     String js=get_Page()->get_java_script();
     request->send(200, "application/javascript", js); // JavaScript küldése
-});
+  });
 
   server.begin(); 
 }

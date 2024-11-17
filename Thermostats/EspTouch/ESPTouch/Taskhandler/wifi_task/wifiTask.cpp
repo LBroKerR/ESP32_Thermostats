@@ -27,18 +27,25 @@ wifiTask::~wifiTask(){
 }
 void wifiTask::init_html_page(){
     server->create_html_page(TITLE);
-                                //variable text_before text_after
-    server->get_Page()->add_tag(ACTIVE_PROGRAM, "Active program: ", "null");
-    server->get_Page()->add_tag(WANTED_TEMP, "Wanted temperature: "," &deg;C");
-    server->get_Page()->add_tag(TEMPERARTURE, "Temperature: ", " &deg;C");
-    server->get_Page()->add_tag(HUMADITY,"Humadity: ", " %");
+                                //css class, var id text
+    server->get_Page()->add_tag("card-title", "null", "Active program");
+    server->get_Page()->add_tag("reading", ACTIVE_PROGRAM, "null");
+    server->get_Page()->add_tag("card-title", "null","Wanted temperature");
+    server->get_Page()->add_tag("reading", WANTED_TEMP," &deg;C");
+    server->get_Page()->add_tag("card-title","null" ,"Temperature");
+    server->get_Page()->add_tag("reading", TEMPERARTURE, " &deg;C");
+    server->get_Page()->add_tag("card-title","null","Humadity");
+    server->get_Page()->add_tag("reading",HUMADITY, " %");
     if(data->getHeater()!=nullptr){
         for (unsigned i = 0; i < data->getHeater()->get_number_of_HeatingCircles(); i++){
-            server->get_Page()->add_tag(String(HEATINGCIRCLE_SWITCH)+String(i), "Heating status on "+String(i)+". Circle: ", "null");
+            server->get_Page()->add_tag("card-title","null" ,"Heating status on "+String(i)+". Circle: ");
+            server->get_Page()->add_tag("reading", String(HEATINGCIRCLE_SWITCH)+String(i), "null");
         }
     }
-    server->get_Page()->add_tag(SIMPLE_TAG,"ESPCarryable", " links:");
+    server->get_Page()->add_tag("card-title","null","Connected devices");
+    server->get_Page()->add_tag("reading","null", "ESPCarryable links:");
     server->get_Page()->set_java_script(get_script());
+    server->get_Page()->set_css(get_styles());
 }
 
 void wifiTask::set_Json_messages(){

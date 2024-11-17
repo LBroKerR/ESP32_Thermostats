@@ -18,16 +18,25 @@ wifiTask::~wifiTask(){
 void wifiTask::init_html_page(){
 
     server->create_html_page(data->getSensor()->getNickName());
-    server->get_Page()->add_tag(String(DEVICE_NAME), "Device name: ", "null");
-    server->get_Page()->add_tag(String(MAC_ADDRESS), "Mac address: ", "null");
-    server->get_Page()->add_tag(String(ID), "Device ID: ", "null");
-    server->get_Page()->add_tag(String(HEATINGCIRCLE_ID), "Heating circle ID: ", "null");
+                                        //css class, var id text
+    server->get_Page()->add_tag("card-title", "null","Device name ");
+    server->get_Page()->add_tag("card", String(DEVICE_NAME), "null");
+    server->get_Page()->add_tag("card-title","null" ,"Mac address: " );
+    server->get_Page()->add_tag("reading",String(MAC_ADDRESS),  "null");
+    server->get_Page()->add_tag("card-title","null" ,"Device ID ");
+    server->get_Page()->add_tag("reading",String(ID), "null");
+    server->get_Page()->add_tag("card-title", "null","Heating circle ID ");
+    server->get_Page()->add_tag("reading",String(HEATINGCIRCLE_ID), "null");
 
-    server->get_Page()->add_tag(String(TEMPERATURE)+String(data->getSensor()->getHeatingCircleID())+"_"+String(data->getSensor()->getID()), "Temperature: "," &deg;C");
-    server->get_Page()->add_tag(String(HUMADITY)+String(data->getSensor()->getHeatingCircleID())+"_"+String(data->getSensor()->getID()), "Humadity: ", " %");
-    server->get_Page()->add_tag(String(SIMPLE_TAG), "ESPTouch server link: ", "null");
+    server->get_Page()->add_tag("card-title", "null","Temperature");
+    server->get_Page()->add_tag("reading",String(TEMPERATURE)+String(data->getSensor()->getHeatingCircleID())+"_"+String(data->getSensor()->getID()), " &deg;C");
+    server->get_Page()->add_tag("card-title","null" ,"Humadity");
+    server->get_Page()->add_tag("reading",String(HUMADITY)+String(data->getSensor()->getHeatingCircleID())+"_"+String(data->getSensor()->getID()), " %");
+    server->get_Page()->add_tag("card-title","null" ,"Server: ");
+    server->get_Page()->add_tag("reading","null", "ESPTouch\n Link: ");
     server->get_Page()->add_list_elem(data->get_wifi_data()->get_ip(),data->get_wifi_data()->get_ip());
     server->get_Page()->set_java_script(get_script());
+    server->get_Page()->set_css(get_styles());
 
 }
 
@@ -113,6 +122,8 @@ void wifiTask::main(){
     if ((millis() - lastTime) > timerDelay) {
         set_Json_messages();
         server->Client_update();
+        set_Json_messages();
+        server->updata();
         lastTime = millis();
     }
     else{
