@@ -2,8 +2,16 @@
 //  calculate the number of words in str
 void SerialPortHandler::CalculateSize(char* str) {
 	bool word = true;
+  bool symbol=false;
+  char Symbol='"';
 	for (unsigned i = 0; str[i] !='\0'; i++){
-		if ( str[i] != ' ' &&  str[i]!= '\t' &&  str[i] != '\n' && str[i]!='\r') {
+		if ((str[i] != ' ' &&  str[i]!= '\t' &&  str[i] != '\n' && str[i]!='\r') || symbol) {
+      if(str[i]==Symbol && !symbol){
+        symbol=true;
+      }
+      else if(str[i]==Symbol && symbol){
+        symbol=false;
+      }
 			if (word) {
 				stackSize++;
 				word = false;
@@ -16,11 +24,19 @@ void SerialPortHandler::CalculateSize(char* str) {
 }
 // searching the first letters of the words in the string
 void SerialPortHandler::startpoints(char* str, unsigned* entris){
-	bool entry = true; 
+	bool entry = true;
+  bool symbol=false;
+  char Symbol='"';
 	unsigned pos = 0;
 	for (unsigned index = 0; index < stackSize; index++){
 		for (unsigned i = pos; str[i] !='\0'; i++) {
-			if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' && str[i]!='\r') {
+			if ((str[i] != ' ' && str[i] != '\t' && str[i] != '\n' && str[i]!='\r') || symbol) {
+      if(str[i]==Symbol && !symbol){
+        symbol=true;
+      }
+      else if(str[i]==Symbol && symbol){
+        symbol=false;
+      }
 				if (entry) {
 					entris[index] = i;
 					entry = false;
@@ -38,22 +54,41 @@ void SerialPortHandler::startpoints(char* str, unsigned* entris){
 // place every word in a string, and collect them in a dynamic array
 void SerialPortHandler::ConvertToStack(char*str) {
 	unsigned *startPoints;
+  bool symbol=false;
+  char Symbol='"';
+  int n=-1;
 	CalculateSize(str);
   startPoints=new unsigned[stackSize];
 	startpoints(str, startPoints);
 	stackData = new String[stackSize];
 	for (unsigned index = 0; index < stackSize; index++) {
 		for (unsigned i = startPoints[index]; str[i]!= '\0'; i++){
-			if ( str[i] != ' ' &&  str[i]!= '\t' &&  str[i] != '\n' && str[i]!='\r') {
+			if ( (str[i] != ' ' &&  str[i]!= '\t' &&  str[i] != '\n' && str[i]!='\r') || symbol ) {
+        if(str[i]==Symbol && !symbol){
+          symbol=true;
+          n=i;
+        }
+        else if(str[i]==Symbol && symbol){
+          symbol=false;
+          n=i;
+        }
+        if(n!=i){
 				stackData[index] +=  str[i];
-			}
+			  }
+      }
 			else {
 				break;
 			}
 		}
+    if(symbol){
+      delete[] stackData;
+      stackData=nullptr;
+      break;
+    }
 	}
   delete[] startPoints;
 }
+
 
 SerialPortHandler::SerialPortHandler(){
 	stackData = nullptr;
@@ -69,6 +104,7 @@ SerialPortHandler::~SerialPortHandler(){
 bool SerialPortHandler::useStack(String* param) {
 	if (stackData == nullptr || stackSize == 0) {
 		delete[] stackData;
+    stackSize=0;
 		stackData = nullptr;
 		return false;
 	}
