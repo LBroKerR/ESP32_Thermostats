@@ -76,6 +76,8 @@ void Taskhandler::OtherTasks(void*parameters){
   sensor.begin();
   InitTask *autoSave=new InitTask();
   wifiTask wifi(&data);
+  HeatingCommunicationTask Controlling(&data);
+  Controlling.set_modbus_communication(data.getHeater()->get_modbus_data().get_ID(),data.getHeater()->get_modbus_data().get_address(),data.getHeater()->get_modbus_data().get_number());
   ESP32Time rtc;
   rtc.setTime(1, data.getTime()->getmin(), data.getTime()->gethour(), DAY, MONTH, YEAR);
          //          s   m   h+1  d    m      y
@@ -83,7 +85,7 @@ void Taskhandler::OtherTasks(void*parameters){
     measuring->measuring(&data, &sensor, &rtc);
     wifi.main();
     autoSave->save(&data);
-    data.getHeater()->Communicate_with_PLC(data.getProg()->get_Wanted_temp());
+    Controlling.Communicate_with_PLC();
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
   while(true){
