@@ -134,6 +134,7 @@ void ui_event_ProgButton(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_PRESSED) {
         _ui_screen_change(&ui_Screen2, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 100, 0, &ui_Screen2_screen_init);
+        lv_label_set_text(ui_Screen_Number,"1");
     }
 }
 void ui_event_wtmpSLider(lv_event_t * e)
@@ -142,7 +143,6 @@ void ui_event_wtmpSLider(lv_event_t * e)
     lv_obj_t * target = lv_event_get_target(e);
     if(event_code == LV_EVENT_VALUE_CHANGED) {
         SetWantedTMPSCR2(e);
-        lv_label_set_text(ui_Screen_Number,"1");
     }
 }
 void ui_event_Button3(lv_event_t * e)

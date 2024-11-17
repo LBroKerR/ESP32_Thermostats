@@ -11,6 +11,8 @@ MyServer::MyServer(String user, String pw, unsigned host) :  server(host) {  // 
     Data=new JSON_message();
 }
 MyServer::~MyServer(){
+  ws.closeAll();
+  server.end();
   if(index!=nullptr){
     delete index;
   }
@@ -20,6 +22,7 @@ MyServer::~MyServer(){
   if(Data!=nullptr){
     delete Data;
   }
+
 }
 
 // WiFi kapcsolat

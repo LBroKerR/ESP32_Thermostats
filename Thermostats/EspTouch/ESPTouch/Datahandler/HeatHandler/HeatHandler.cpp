@@ -1,44 +1,18 @@
 #include "HeatHandler.h"
 
 
-
-void HeatHandler::Communicate_with_PLC(float wtmp){
-    uint8_t data;
-    get_HeatingCircles_status(wtmp);
-    if(modbus==nullptr){
-        return;
-    }
-    for(unsigned i=0; i<number_of_HeatingCircles; i++){
-        if(HeatingCircles[i].get_switch_changed() || get_heatingMode_changed()){
-            if(status[i]==true){
-                data=((i&=0x3F)<<2)|(HEATING_ON<<1)| heatingMode;
-            //output: i=3 heatingMode=true-> 0011  1  1-> id space heating on space heating mode(auto(true)/gas(false))
-            }
-            else{
-                data=((i&=0x3F)<<2) | (HEATING_OFF<<1) | heatingMode;
-            }
-            modbus->UsingModbus(data);
-            set_heatingMode_changed(false);
-            HeatingCircles[i].set_switch_changed(false);
-        }
-    }
-    // modbus->ACKmsgCheck();
-}
-
 HeatHandler::HeatHandler(){
     HeatingCircles=nullptr;
     number_of_HeatingCircles=0;
     heatingMode=false;
     heatingMode_changed=false;
     status=nullptr;
-    modbus=nullptr;//new modbusHandler();
 }
 HeatHandler::HeatHandler(unsigned slave_id){
     HeatingCircles=nullptr;
     number_of_HeatingCircles=0;
     heatingMode=false;
     status=nullptr;
-    modbus=nullptr;//new modbusHandler();
 }
 HeatHandler::~HeatHandler(){
     if(HeatingCircles!=nullptr){
@@ -47,13 +21,6 @@ HeatHandler::~HeatHandler(){
     if(status!=nullptr){
         delete[] status;
     }
-    if(modbus!=nullptr){
-        delete modbus;
-    }
-}
-
-void HeatHandler::set_modbus_communication(unsigned id, uint16_t register_address, uint8_t num_reg){
-     modbus=new modbusHandler(id, register_address, num_reg);
 }
 
 bool HeatHandler::add_HeatingCircles(){
@@ -81,8 +48,9 @@ bool HeatHandler::add_HeatingCircles(){
 }
 
 bool HeatHandler::add_HeatingCircles(unsigned number){
-    if(HeatingCircles!=nullptr){
+    if(HeatingCircles!=nullptr && status!=nullptr){
         delete[] HeatingCircles;
+        delete[] status;
     }
     number_of_HeatingCircles= number;
     HeatingCircles=new HeatingCircleHandler[number_of_HeatingCircles];
@@ -97,7 +65,7 @@ bool HeatHandler::remove_HeatingCircles(unsigned index){
     if(HeatingCircles==nullptr || number_of_HeatingCircles==0 || status==nullptr){
         return false;
     }
-    if(index> 0 && index< number_of_HeatingCircles){
+    if(index> 1 && index< number_of_HeatingCircles){
         HeatingCircleHandler* tmp=new HeatingCircleHandler[number_of_HeatingCircles-1];
         bool *tmpStatus=new bool[number_of_HeatingCircles-1];
         for(unsigned i=0; i< number_of_HeatingCircles-1; i++){
@@ -149,8 +117,10 @@ void HeatHandler::remove_device_from_HeatingCircles(String ip){
         return;
     }
     for(unsigned i=0; i<number_of_HeatingCircles; i++){
-        if(HeatingCircles[i].removeDevice(ip)){
-            break;
+        if(HeatingCircles[i].getDevices()!=nullptr){
+            if(HeatingCircles[i].removeDevice(ip)){
+                break;
+            }
         }
     }
 }
@@ -205,4 +175,11 @@ bool HeatHandler::get_heatingMode_changed()const{
 }
 void HeatHandler::set_heatingMode_changed(bool const param){
     heatingMode_changed=param;
+}
+
+void HeatHandler::set_modbus_data(unsigned id, uint16_t register_address, uint8_t register_number){
+    modbusData.set_data(id, register_address, register_number);
+}
+Modbus_data HeatHandler::get_modbus_data(){
+    return modbusData;
 }

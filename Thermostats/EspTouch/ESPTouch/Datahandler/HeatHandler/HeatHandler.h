@@ -3,7 +3,7 @@
 #define HEATHANDLER_H
 
 #include "HeatingCircleHandler.h"
-#include "modbusHandler.h"
+#include "Modbus_data.h"
 
 #define HEATING_ON true
 #define HEATING_OFF false
@@ -11,7 +11,7 @@
 
 class HeatHandler{
     HeatingCircleHandler* HeatingCircles;
-    modbusHandler* modbus;
+    Modbus_data modbusData;
     unsigned number_of_HeatingCircles;
     bool *status;
     bool heatingMode;
@@ -19,13 +19,11 @@ class HeatHandler{
 
 public:
 
-    void Communicate_with_PLC(float);
 
     HeatHandler();
     HeatHandler(unsigned slave_id);
     ~HeatHandler();
 
-    void set_modbus_communication(unsigned id, uint16_t register_address, uint8_t num_reg);
     bool add_HeatingCircles();
     bool add_HeatingCircles(unsigned number);
     bool remove_HeatingCircles(unsigned index);
@@ -45,6 +43,9 @@ public:
 
     bool get_heatingMode_changed()const;
     void set_heatingMode_changed(bool const);
+
+    void set_modbus_data(unsigned id, uint16_t register_address, uint8_t register_number);
+    Modbus_data get_modbus_data();
 
 
 };

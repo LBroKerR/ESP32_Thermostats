@@ -45,7 +45,7 @@
       obj->getHeater()->add_HeatingCircles(heating_circle_Number_ID);
       obj->getHeater()->add_Measuringsensor(id-1, offset, id-1,name);
       obj->getHeater()->setHeatingMode(read_heating_mode());
-      obj->getHeater()->set_modbus_communication(get_modbus_id(),get_modbus_register_address(),get_modbus_register_number());
+      obj->getHeater()->set_modbus_data(get_modbus_id(),get_modbus_register_address(),get_modbus_register_number());
       return obj;
     }
 

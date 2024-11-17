@@ -132,7 +132,6 @@ bool changeTask(MainTask* screens,DataHandler* data, lv_chart_series_t * ui_TmpC
 }
 void GuiTask_main(MainTask* screens, DataHandler* data){
   Gui_init();
-  //Serial.begin(115200);
   String screen_number="0";
   unsigned switch_of_screen=data->getTime()->getmin()+1;
   lv_chart_series_t * ui_TmpChart_series_1 = lv_chart_add_series(ui_TmpChart, lv_color_hex(0x19ACBA),LV_CHART_AXIS_PRIMARY_Y);
@@ -142,7 +141,7 @@ void GuiTask_main(MainTask* screens, DataHandler* data){
 
       task=changeTask(screens,data,ui_TmpChart_series_1, &screen_number);
       lv_timer_handler();
-    is_user_interacted(data, &switch_of_screen);
+      is_user_interacted(data, &switch_of_screen);
 
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }

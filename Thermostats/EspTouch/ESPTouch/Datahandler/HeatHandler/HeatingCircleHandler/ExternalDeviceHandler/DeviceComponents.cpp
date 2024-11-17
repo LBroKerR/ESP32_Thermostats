@@ -41,9 +41,9 @@ bool DeviceComponents::remove_Component(String ip){
             index=i;
         }
     }
-    if(index!=-1){
+    if(index>-1){
        Components* tmp=nullptr;
-        if(index!=0 && number_of_comp!=1){
+        if( number_of_comp>1){
         tmp=new Components[number_of_comp-1];
             for (unsigned i = 0; i < number_of_comp-1; i++){
                 if(i<index){

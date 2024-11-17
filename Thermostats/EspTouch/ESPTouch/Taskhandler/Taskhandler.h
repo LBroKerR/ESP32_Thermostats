@@ -16,6 +16,7 @@
 #include "SerialTask.h"
 #include "InitTask.h"
 #include "wifiTask.h"
+#include "HeatingCommunicationTask.h"
 
 #define NUMBER_OF_TASKS_CORE1 3
 #define NUMBER_OF_TASKS_CORE0 1
@@ -27,6 +28,8 @@ class Taskhandler{
     static DataHandler data;
     QueueHandle_t myQueue1;
     TaskHandle_t core1;
+
+    static bool end_task_on_core_0;
 
 public:
 	Taskhandler();

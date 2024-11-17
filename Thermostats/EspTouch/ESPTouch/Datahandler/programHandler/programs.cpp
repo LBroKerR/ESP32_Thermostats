@@ -100,10 +100,11 @@
         server_update_wtmp=param;
     }
 
-    void programs::set_received_index(unsigned param){
+    void programs::set_received_index(unsigned param, unsigned hour_index){
         if(param>=0 && param<NUMBER_OF_PROGRAM){
             active_program_index=param;
-            set_Wanted_temp(get_program_element());
+            set_Wanted_temp(Programs[active_program_index][hour_index]);
+           // set_wtmp_changed(true);
             set_active_program_index_changed(true);
         }
     }

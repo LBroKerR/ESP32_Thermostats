@@ -9,45 +9,19 @@ void MainTask::update_wtmp(DataHandler*data){
     //if arc modify value or hour change-> send data to carryable
     //if hour change-> auto!
 
-    /*if(data->getProg()->get_wtmp_changed()){
-      data->getProg()->set_wtmp_changed(false);
-      if(data->getProg()->get_Wanted_temp()!=(((float)lv_arc_get_value(ui_WtmpARC))/10.0)){
-        //carryable 
-        lv_label_set_text(ui_AutoManual, "Manual");
-        //set arc
-        lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0));
-      }
-    }
-    else if(!data->getProg()->get_wtmp_changed()){
-      if(data->getProg()->get_Wanted_temp()!=(((float)lv_arc_get_value(ui_WtmpARC))/10.0)){
-        //set arc -> user interaction
-        data->getProg()->set_Wanted_temp((float)lv_arc_get_value(ui_WtmpARC)/10.0);
-         lv_label_set_text(ui_AutoManual, "Manual");
-      }
-
-    }
-    if(data->getTime()->get_hour_Changed()){
-
-      data->getProg()->set_Wanted_temp(data->getProg()->get_program_element(data->getTime()->gethour()));
-      lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0)); 
-      lv_label_set_text(ui_AutoManual, "Auto");
-    }
-    if(data->getProg()->get_Wanted_temp()=(((float)lv_arc_get_value(ui_WtmpARC))/10.0)){
-      lv_label_set_text(ui_AutoManual, "Auto");
-    }
-    tmp=String(data->getProg()->get_Wanted_temp(),1)+" °C";
-    lv_label_set_text(ui_WtmpLabel, tmp.c_str());*/
-
-    if(data->getProg()->get_wtmp_changed()){//auto
+  if(auto_flag){//auto
+    data->getProg()->set_Wanted_temp(data->getProg()->get_program_element(data->getTime()->gethour()));
     lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0));
-    data->getProg()->set_wtmp_changed(false);
-    if(data->getProg()->get_program_element(data->getTime()->gethour())==data->getProg()->get_Wanted_temp()){
-      lv_label_set_text(ui_AutoManual, "Auto");
-    }
+    lv_label_set_text(ui_AutoManual, "Auto");
+    auto_flag=false;
   }
-  else if(data->getProg()->get_Wanted_temp()!=(float)((lv_arc_get_value(ui_WtmpARC))/10.0)){//manual
+  if(data->getProg()->get_Wanted_temp()!=(float)((lv_arc_get_value(ui_WtmpARC))/10.0)){//manual
     data->getProg()->set_Wanted_temp((float)(lv_arc_get_value(ui_WtmpARC))/10.0);
-      lv_label_set_text(ui_AutoManual, "Manual");
+    lv_label_set_text(ui_AutoManual, "Manual");
+  }
+  if(data->getProg()->get_wtmp_changed()){
+    lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0));
+    lv_label_set_text(ui_AutoManual, "Auto");
   }
     tmp=String(data->getProg()->get_Wanted_temp(),1)+" °C";
     lv_label_set_text(ui_WtmpLabel,tmp.c_str());
@@ -104,7 +78,7 @@ bool MainTask::update_progindex_roller(DataHandler*data){
     lv_roller_set_selected(ui_Roller1, (uint16_t) data->getProg()->get_active_program_index(), LV_ANIM_OFF);
     output=true;
   }
-   if(data->getProg()->get_active_program_index()!=lv_roller_get_selected(ui_Roller1) && !data->getProg()->get_active_program_index_changed()){
+  if(data->getProg()->get_active_program_index()!=lv_roller_get_selected(ui_Roller1) && !data->getProg()->get_active_program_index_changed()){
     //user interaction
     // set server_prog_index to true
     //set prog_index_changed to true
@@ -120,46 +94,41 @@ bool MainTask::update_progindex_roller(DataHandler*data){
 bool MainTask::update_proghour_roller(DataHandler*data){
   //if prog index changed-> set slider, set text return true
   //if roller changed-> set slider, set text, set database proghour index. retunr true;
+  int ProgHourIndex=lv_roller_get_selected(ui_Roller2);
   String str;
   if(data->getProg()->get_active_program_index_changed()){
     lv_slider_set_value(ui_wtmpSLider, (int32_t)(data->getProg()->get_program_element()*10.0), LV_ANIM_OFF);
-    str=String(data->getProg()->get_program_element(),1)+" °C";
-    lv_label_set_text(ui_WTMPSliderLable, str.c_str());
+   // str=String(data->getProg()->get_program_element(),1)+" °C";
+    //lv_label_set_text(ui_WTMPSliderLable, str.c_str());
     data->getProg()->set_active_program_index_changed(false);
     return true;
   }
-  else if(data->getProg()->get_ProgHour_index()!=lv_roller_get_selected(ui_Roller2)){
-    data->getProg()->set_ProgHour_index(lv_roller_get_selected(ui_Roller2));
+  else if(data->getProg()->get_ProgHour_index()!=ProgHourIndex){
+    data->getProg()->set_ProgHour_index(ProgHourIndex);
     return true;
   }
-  else{
-    data->getProg()->set_Wanted_temp(data->getProg()->get_program_element());
-    data->getProg()->set_Wanted_temp(data->getProg()->get_program_element(data->getTime()->gethour()));
-      lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0)); 
-      lv_label_set_text(ui_AutoManual, "Auto");
+  else if(data->getTime()->gethour()==ProgHourIndex){
+    auto_flag=true;
   }
   return false;
 }
 
 bool MainTask::update_progindex_slider(DataHandler* data){
-  bool output=false;
+  int sliderVaule=lv_slider_get_value(ui_wtmpSLider);
   String str;
   if(data->getProg()->get_ProgHour_index_changed()){
-    data->getProg()->set_ProgHour_index_changed(false);
     lv_slider_set_value(ui_wtmpSLider, (int32_t)(data->getProg()->get_program_element()*10.0), LV_ANIM_OFF);
-    str=String(data->getProg()->get_program_element(),1)+" °C";
-    lv_label_set_text(ui_WTMPSliderLable, str.c_str());
-    output=true;
-  }else{
-  //if(data->getProg()->get_program_element()!=((float)lv_slider_get_value(ui_wtmpSLider)/10.0)){
-    data->getProg()->set_program_element((float)lv_slider_get_value(ui_wtmpSLider)/10.0);
-    str=String(data->getProg()->get_program_element(),1)+" °C";
-    lv_label_set_text(ui_WTMPSliderLable, str.c_str());
-    output=true;
+    data->getProg()->set_ProgHour_index_changed(false);
   }
-  return output;
+  else{ 
+    data->getProg()->set_program_element((float)sliderVaule/10.0);
+  }
+  str=String(data->getProg()->get_program_element(),1)+" °C";
+  lv_label_set_text(ui_WTMPSliderLable, str.c_str());
+  return true;
 }
 void MainTask::upgrade_Screen2(DataHandler*data, lv_chart_series_t * ui_TmpChart_series_1){//prog -> active prog, chart, slider
+
  bool update_index=update_progindex_roller(data);
  bool update_hour=update_proghour_roller(data);
  bool update_hour_temp_value=update_progindex_slider(data);
@@ -170,47 +139,14 @@ void MainTask::upgrade_Screen2(DataHandler*data, lv_chart_series_t * ui_TmpChart
     }
     lv_chart_set_ext_y_array(ui_TmpChart, ui_TmpChart_series_1, array);// chart printing
   }
-/*String str;
-  int ProgHourIndex=lv_roller_get_selected(ui_Roller2);
-  int ActiveprogIndex=lv_roller_get_selected(ui_Roller1);
-  int sliderVaule=lv_slider_get_value(ui_wtmpSLider);
-  bool printChart=false;
-
-
-  if(data->getProg()->get_ProgHour_index()!=ProgHourIndex){
-    data->getProg()->set_ProgHour_index(ProgHourIndex);
-    lv_slider_set_value(ui_wtmpSLider, (int32_t)(data->getProg()->get_program_element(ProgHourIndex)*10.0), LV_ANIM_OFF);
-    str= String((float)(lv_slider_get_value(ui_wtmpSLider)/10.0)) +" °C";
-    lv_label_set_text(ui_WTMPSliderLable, str.c_str());
-  }
-  else if(data->getProg()->get_ProgHour_index()==ProgHourIndex)
-  {
-    str= String((float)sliderVaule/10.0,1) +" °C";
-    lv_label_set_text(ui_WTMPSliderLable, str.c_str());
-    data->getProg()->set_program_element(ProgHourIndex,(float)sliderVaule/10.0);
-    if(data->getTime()->gethour()==ProgHourIndex){
-      data->getProg()->set_Wanted_temp((float)sliderVaule/10.0);
-    }
-    printChart=true;
-  }
-  if(data->getProg()->get_active_program_index()!=ActiveprogIndex){
-    data->getProg()->set_active_program_index(ActiveprogIndex);
-    //slider
-    lv_slider_set_value(ui_wtmpSLider, (int32_t)(data->getProg()->get_program_element(ProgHourIndex)*10.0), LV_ANIM_OFF);
-    str= String((float)(lv_slider_get_value(ui_wtmpSLider)/10.0)) +" °C";
-    lv_label_set_text(ui_WTMPSliderLable, str.c_str());
-    printChart=true;
-  }
-  if(printChart){
-    static lv_coord_t array[24];
-    for(unsigned i=0; i<SIZE; i++){
-      array[i]=(lv_coord_t)((int)(data->getProg()->get_program_element(i)*10.0));
-    }
-    lv_chart_set_ext_y_array(ui_TmpChart, ui_TmpChart_series_1, array);// chart printing
-  }*/
 }
 void MainTask::upgrade_Screen3(DataHandler*data){//options -> heating mode
-  data->getHeater()->setHeatingMode((bool)lv_dropdown_get_selected(ui_HeatSetting));
+  if(data->getHeater()->getHeatingMode()!= (bool)lv_dropdown_get_selected(ui_HeatSetting)){
+    data->getHeater()->setHeatingMode((bool)lv_dropdown_get_selected(ui_HeatSetting));
+  }
+  else{
+    data->getHeater()->set_heatingMode_changed(false);
+  }
 }
 void MainTask::upgrade_Screen4(DataHandler*data){//external devices -> dynamic deviceses components!
   unsigned size=0;
@@ -268,6 +204,7 @@ void MainTask::init_screens_datas(DataHandler*data,lv_chart_series_t * ui_TmpCha
   lv_chart_set_ext_y_array(ui_TmpChart, ui_TmpChart_series_1, array);// chart printing
   //screen3 options
   lv_dropdown_set_selected(ui_HeatSetting, (unsigned)data->getHeater()->getHeatingMode());
+  data->getHeater()->set_heatingMode_changed(false);
   //screen4 devices list
   //empty!
 }
