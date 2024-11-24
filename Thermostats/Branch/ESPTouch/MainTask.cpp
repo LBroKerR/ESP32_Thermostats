@@ -15,13 +15,14 @@ void MainTask::update_wtmp(DataHandler*data){
     lv_label_set_text(ui_AutoManual, "Auto");
     auto_flag=false;
   }
-  if(data->getProg()->get_Wanted_temp()!=(float)((lv_arc_get_value(ui_WtmpARC))/10.0)){//manual
+  if(data->getProg()->get_Wanted_temp()!=(float)((lv_arc_get_value(ui_WtmpARC))/10.0) && !data->getProg()->get_wtmp_changed()){//manual
     data->getProg()->set_Wanted_temp((float)(lv_arc_get_value(ui_WtmpARC))/10.0);
     lv_label_set_text(ui_AutoManual, "Manual");
   }
   if(data->getProg()->get_wtmp_changed()){
     lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0));
-    lv_label_set_text(ui_AutoManual, "Auto");
+    lv_label_set_text(ui_AutoManual, "Manual");
+    data->getProg()->set_wtmp_changed(false);
   }
     tmp=String(data->getProg()->get_Wanted_temp(),1)+" °C";
     lv_label_set_text(ui_WtmpLabel,tmp.c_str());

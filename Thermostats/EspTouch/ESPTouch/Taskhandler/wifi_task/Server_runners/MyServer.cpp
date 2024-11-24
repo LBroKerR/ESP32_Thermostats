@@ -45,7 +45,7 @@ void MyServer::Server_turning_on() {
   ws.onEvent([this](AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
     this->onEvent(server, client, type, arg, data, len);
   });
-webSocket.onEvent([this]( WStype_t type, uint8_t* payload, size_t length) {
+  webSocket.onEvent([this]( WStype_t type, uint8_t* payload, size_t length) {
     this->onEvent1( type, payload, length);
   });
   server.addHandler(&ws);

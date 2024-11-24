@@ -52,21 +52,15 @@ void wifiTask::set_Json_messages(){
     JSONVar msg;
                     //var_name, var_value
     if(data->getProg()->get_server_update_prog_index() || server->get_new_client()){
-        msg[ACTIVE_PROGRAM]=String(data->getProg()->get_active_program_index()+1);
         msg[ACTIVE_PROGRAM_SLAVE]=String(data->getProg()->get_active_program_index()+1);
         data->getProg()->set_server_update_prog_index(false);
     }
-    else{
-        msg[ACTIVE_PROGRAM]=String(data->getProg()->get_active_program_index()+1);
-    }
     if(data->getProg()->get_server_update_wtmp() || server->get_new_client()){
-        msg[WANTED_TEMP]=String(data->getProg()->get_Wanted_temp(),1);
         msg[WANTED_TEMP_SLAVE]=String(data->getProg()->get_Wanted_temp(),1);
         data->getProg()->set_server_update_wtmp(false);
     }
-    else{
-        msg[WANTED_TEMP]=String(data->getProg()->get_Wanted_temp(),1);
-    }
+    msg[ACTIVE_PROGRAM]=String(data->getProg()->get_active_program_index()+1);
+    msg[WANTED_TEMP]=String(data->getProg()->get_Wanted_temp(),1);
     msg[TEMPERARTURE]=String(data->getHeater()->getHeatingCircleHandler()[sensor_location].getSensor()->getMeasuredTemperature(),1);
     msg[HUMADITY]=String(data->getHeater()->getHeatingCircleHandler()[sensor_location].getSensor()->getMeasureHmd());
     msg[TIME_HOUR]=String(data->getTime()->gethour());
@@ -92,9 +86,9 @@ void wifiTask::client_server_activity_check(){
         for(unsigned i=0; i<server->get_Clients()->getSize(); i++){
             if(server->get_Clients()->get_ids()!=nullptr && server->get_Clients()->get()!=nullptr && server->get_Clients()->get_status()!=nullptr){
                 if(server->get_Clients()->get_status()[i]==false){
-                    //server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]);
-                   data->getHeater()->remove_device_from_HeatingCircles(server->get_Clients()->get()[i]);
-                   // server->get_Clients()->Del(server->get_Clients()->get()[i]);
+                    server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]);
+                    data->getHeater()->remove_device_from_HeatingCircles(server->get_Clients()->get()[i]);
+                    server->get_Clients()->Del(server->get_Clients()->get()[i]);
                 }
             }
         }
