@@ -7,6 +7,8 @@
 
 #include "UnorderedList.h"
 #include "P_tag.h"
+
+#define LIST_P_TAG "ESPTouch Link: "
 class HTML_page{
 
     String head;

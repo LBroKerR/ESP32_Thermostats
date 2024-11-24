@@ -15,6 +15,6 @@ String UnorderedList::get_link()const{
     return list_elem_vaule;
 }
 String UnorderedList::get_html_link(){
-    String str="<li><a href=http://"+get_link()+"/>"+get_text()+"</a>";
+    String str="<li><a href=http://"+get_link()+"/>"+get_text()+"</a></li>";
     return str;
 }

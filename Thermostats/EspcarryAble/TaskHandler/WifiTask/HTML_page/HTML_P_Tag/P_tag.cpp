@@ -19,8 +19,11 @@ void P_tag::set_tag(String class_, String Id, String text){
     name=text;
     Class=class_;
 }
+String P_tag::get_name(){
+  return name;
+}
 String P_tag::get_html_tag(){
-  String str="<p";
+  String str="<p ";
   if(Class!="null"){
     str+="class=\""+Class+"\">";
   }

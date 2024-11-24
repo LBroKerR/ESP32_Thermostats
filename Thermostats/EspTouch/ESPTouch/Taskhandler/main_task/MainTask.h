@@ -33,9 +33,12 @@ public:
     void set_Active(unsigned param);
     unsigned get_Active()const;
     void Screen_Upgrading(DataHandler*data,lv_chart_series_t * ui_TmpChart_series_1);
+    void init_screens_datas(DataHandler*data,lv_chart_series_t * ui_TmpChart_series_1);
+
+
+
     void setSensor_Location(DataHandler*data);
     unsigned getSensorLocation();
-    void init_screens_datas(DataHandler*data,lv_chart_series_t * ui_TmpChart_series_1);
     void measuring(DataHandler*data, DHT*sensor,ESP32Time *rtc);
 };
 #endif //MAINTASK_H

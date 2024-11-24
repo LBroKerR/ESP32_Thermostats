@@ -128,17 +128,17 @@ String HTML_page::get_page(){
         str+="<div class=\"card\">";
         for (unsigned ii = i; ii < (i+2); ii++){
             str+=data[ii].get_html_tag();
+            if(LIST_P_TAG==data[ii].get_name()){
+                str+="<ul>";
+                for (unsigned i = 0; i < number_of_listelem; i++){
+                    str+=list[i].get_html_link();
+                }
+                str+="</ul>";
+            }
         }
         str+="</div>";
     }
-    str+="</div></div>"
-    "<div class=\"card-grid\">"
-        "<div class=\"card\"><ul>";
-    for (unsigned i = 0; i < number_of_listelem; i++){
-        str+=list[i].get_html_link();
-    }
-     str+="</ul></div></div>"
-     "<script src=\"script.js\"></script></body></html>";
+    str+="</div></div><script src=\"script.js\"></script></body></html>";
     return str;
 }
 

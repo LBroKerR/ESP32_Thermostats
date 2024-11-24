@@ -15,6 +15,7 @@ public:
     P_tag(String Klass, String id, String text);
 
     void set_tag(String CClass, String id, String text);
+    String get_name();
     String get_html_tag();
 
 };

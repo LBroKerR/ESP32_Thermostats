@@ -20,7 +20,7 @@ void wifiTask::init_html_page(){
     server->create_html_page(data->getSensor()->getNickName());
                                         //css class, var id text
     server->get_Page()->add_tag("card-title", "null","Device name ");
-    server->get_Page()->add_tag("card", String(DEVICE_NAME), "null");
+    server->get_Page()->add_tag("reading", String(DEVICE_NAME), "null");
     server->get_Page()->add_tag("card-title","null" ,"Mac address: " );
     server->get_Page()->add_tag("reading",String(MAC_ADDRESS),  "null");
     server->get_Page()->add_tag("card-title","null" ,"Device ID ");
@@ -33,7 +33,7 @@ void wifiTask::init_html_page(){
     server->get_Page()->add_tag("card-title","null" ,"Humadity");
     server->get_Page()->add_tag("reading",String(HUMADITY)+String(data->getSensor()->getHeatingCircleID())+"_"+String(data->getSensor()->getID()), " %");
     server->get_Page()->add_tag("card-title","null" ,"Server: ");
-    server->get_Page()->add_tag("reading","null", "ESPTouch\n Link: ");
+    server->get_Page()->add_tag("reading","null", "ESPTouch Link: ");
     server->get_Page()->add_list_elem(data->get_wifi_data()->get_ip(),data->get_wifi_data()->get_ip());
     server->get_Page()->set_java_script(get_script());
     server->get_Page()->set_css(get_styles());
