@@ -97,7 +97,7 @@ void  HTML_page::remove_list_elem(String param){
     }
     int index=-1;
     for (unsigned i = 0; i < number_of_listelem; i++){
-        if(param==list[i].get_link()){
+        if(param==list[i].get_text()){
             index=i;
         }
     }

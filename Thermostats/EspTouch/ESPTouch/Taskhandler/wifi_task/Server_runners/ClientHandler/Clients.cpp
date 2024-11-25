@@ -25,7 +25,7 @@ bool Clients::add(String param, unsigned id, bool state){
             ids[i]=id;
             status[i]=state;
           }
-            return false;
+            return true;//false;
         }
     }
     String*tmp=new String[size+1];

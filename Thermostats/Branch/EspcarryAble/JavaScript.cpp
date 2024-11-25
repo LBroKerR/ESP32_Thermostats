@@ -1,7 +1,7 @@
 #include "JavaScript.h"
 
-String get_script(){
-    String str=R"rawliteral(
+String get_script(String host){
+String str=R"rawliteral(
 var websocket;
 // Init web socket when the page loads
 window.addEventListener('load', onload);
@@ -16,7 +16,8 @@ function getReadings(){
 
 function initWebSocket() {
     console.log('Trying to open a WebSocket connection…');
-    websocket = new WebSocket('ws://' + window.location.hostname + '/ws');
+    websocket = new WebSocket('ws://' + window.location.hostname + )rawliteral";
+str+="':" +String(host)+ R"rawliteral(/ws');
     websocket.onopen = onOpen;
     websocket.onclose = onClose;
     websocket.onmessage = onMessage;

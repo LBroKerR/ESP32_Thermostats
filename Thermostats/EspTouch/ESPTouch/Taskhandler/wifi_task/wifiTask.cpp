@@ -44,7 +44,7 @@ void wifiTask::init_html_page(){
     }
     server->get_Page()->add_tag("card-title","null","Connected devices");
     server->get_Page()->add_tag("reading","null", "ESPCarryable links:");
-    server->get_Page()->set_java_script(get_script());
+    server->get_Page()->set_java_script(get_script(String(data->get_wifi_data()->get_host())));
     server->get_Page()->set_css(get_styles());
 }
 
@@ -86,9 +86,9 @@ void wifiTask::client_server_activity_check(){
         for(unsigned i=0; i<server->get_Clients()->getSize(); i++){
             if(server->get_Clients()->get_ids()!=nullptr && server->get_Clients()->get()!=nullptr && server->get_Clients()->get_status()!=nullptr){
                 if(server->get_Clients()->get_status()[i]==false){
-                    server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]);
+                    server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]+String(data->get_wifi_data()->get_host()));
                     data->getHeater()->remove_device_from_HeatingCircles(server->get_Clients()->get()[i]);
-                    server->get_Clients()->Del(server->get_Clients()->get()[i]);
+                    //server->get_Clients()->Del(server->get_Clients()->get()[i]);
                 }
             }
         }

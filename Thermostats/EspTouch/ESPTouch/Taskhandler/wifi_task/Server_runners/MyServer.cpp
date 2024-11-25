@@ -62,6 +62,9 @@ void MyServer::Server_turning_on() {
     String js=get_Page()->get_java_script();
     request->send(200, "application/javascript", js); // JavaScript küldése
   });
+  server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request) {
+        request->send(200, "image/x-icon", ""); // Üres válasz
+  });
 
   server.begin(); 
 }
@@ -156,7 +159,8 @@ void MyServer::onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, Aws
       //Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
       if(check_ip_host(client->remoteIP())){
         if(clients->add(client->remoteIP().toString(),client->id(),true)){
-          get_Page()->add_list_elem(client->remoteIP().toString().c_str(),+client->remoteIP().toString().c_str());
+          String str=client->remoteIP().toString()+":"+String(Host);
+          get_Page()->add_list_elem(str.c_str(),client->remoteIP().toString().c_str());
           new_client=true;
         }
       }

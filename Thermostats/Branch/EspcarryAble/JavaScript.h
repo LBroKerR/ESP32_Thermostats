@@ -4,6 +4,6 @@
 
 #include <Arduino.h>
 
-String get_script();
+String get_script(String);
 
 #endif //JAVASCRIPT_H

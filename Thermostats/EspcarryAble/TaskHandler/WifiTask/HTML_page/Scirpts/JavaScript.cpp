@@ -1,7 +1,7 @@
 #include "JavaScript.h"
 
-String get_script(){
-    String str=R"rawliteral(
+String get_script(String host){
+String str=R"rawliteral(
 var websocket;
 // Init web socket when the page loads
 window.addEventListener('load', onload);
@@ -16,7 +16,8 @@ function getReadings(){
 
 function initWebSocket() {
     console.log('Trying to open a WebSocket connection…');
-    websocket = new WebSocket('ws://' + window.location.hostname + '/ws');
+    websocket = new WebSocket('ws://' + window.location.hostname + )rawliteral";
+str+="':" +String(host)+ R"rawliteral(/ws');
     websocket.onopen = onOpen;
     websocket.onclose = onClose;
     websocket.onmessage = onMessage;
@@ -38,6 +39,25 @@ function onClose(event) {
 }
 
 // Function that receives the message from the ESP32 with the readings
+//new
+function onMessage(event) {
+    console.log(event.data);
+    var myObj = JSON.parse(event.data);
+
+    // existing variable will be setted via Json msg. 
+    Object.keys(myObj).forEach(key => {
+        var element = document.getElementById(key);
+        if (element) {
+            element.innerHTML = myObj[key];
+        }
+    });
+}
+)rawliteral";
+
+    return str;
+}
+
+/* old
 function onMessage(event) {
     console.log(event.data);
     var myObj = JSON.parse(event.data);
@@ -48,7 +68,4 @@ function onMessage(event) {
         document.getElementById(key).innerHTML = myObj[key];
     }
 }
-)rawliteral";
-
-    return str;
-}
+*/

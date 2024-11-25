@@ -45,7 +45,7 @@ void MyServer::Server_turning_on() {
   ws.onEvent([this](AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, uint8_t *data, size_t len) {
     this->onEvent(server, client, type, arg, data, len);
   });
-webSocket.onEvent([this]( WStype_t type, uint8_t* payload, size_t length) {
+  webSocket.onEvent([this]( WStype_t type, uint8_t* payload, size_t length) {
     this->onEvent1( type, payload, length);
   });
   server.addHandler(&ws);
@@ -61,6 +61,9 @@ webSocket.onEvent([this]( WStype_t type, uint8_t* payload, size_t length) {
   server.on("/script.js", HTTP_GET, [this](AsyncWebServerRequest *request) {
     String js=get_Page()->get_java_script();
     request->send(200, "application/javascript", js); // JavaScript küldése
+  });
+  server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request) {
+        request->send(200, "image/x-icon", ""); // Üres válasz
   });
 
   server.begin(); 
@@ -156,7 +159,8 @@ void MyServer::onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, Aws
       //Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
       if(check_ip_host(client->remoteIP())){
         if(clients->add(client->remoteIP().toString(),client->id(),true)){
-          get_Page()->add_list_elem(client->remoteIP().toString().c_str(),+client->remoteIP().toString().c_str());
+          String str=client->remoteIP().toString()+":"+String(Host);
+          get_Page()->add_list_elem(str.c_str(),client->remoteIP().toString().c_str());
           new_client=true;
         }
       }
