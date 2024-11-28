@@ -237,12 +237,3 @@ void  MainTask::setSensor_Location(DataHandler*data){
 unsigned MainTask::getSensorLocation(){
   return sensor_location;
 }
-
-void MainTask::measuring(DataHandler*data, DHT*sensor,ESP32Time *rtc){
-    unsigned min=rtc->getMinute();
-    unsigned hour=rtc->getHour(true);
-    data->getTime()->setClock(hour, min);
-    if(data->getHeater()->getHeatingCircleHandler()[getSensorLocation()].getSensor()!=nullptr){
-        data->getHeater()->getHeatingCircleHandler()[getSensorLocation()].getSensor()->measuring(sensor->readTemperature(),(unsigned)sensor->readHumidity());
-    }
-}
