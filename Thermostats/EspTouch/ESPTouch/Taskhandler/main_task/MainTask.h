@@ -2,8 +2,6 @@
 #ifndef MAINTASK_H
 #define MAINTASK_H
 
-#include <ESP32Time.h>
-#include <DHT.h>
 #include "DataHandler.h"
 #include "ui.h"
 #include <Arduino.h>
@@ -33,12 +31,8 @@ public:
     void set_Active(unsigned param);
     unsigned get_Active()const;
     void Screen_Upgrading(DataHandler*data,lv_chart_series_t * ui_TmpChart_series_1);
-    void init_screens_datas(DataHandler*data,lv_chart_series_t * ui_TmpChart_series_1);
-
-
-
     void setSensor_Location(DataHandler*data);
     unsigned getSensorLocation();
-    void measuring(DataHandler*data, DHT*sensor,ESP32Time *rtc);
+    void init_screens_datas(DataHandler*data,lv_chart_series_t * ui_TmpChart_series_1);
 };
 #endif //MAINTASK_H

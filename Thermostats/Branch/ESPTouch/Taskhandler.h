@@ -11,6 +11,8 @@
 
 #include "DataHandler.h"
 
+#include "esp_task_wdt.h"
+
 #include "MainTask.h"
 #include "GuiTask.h"
 #include "SerialTask.h"

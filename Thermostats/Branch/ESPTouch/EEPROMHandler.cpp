@@ -273,11 +273,9 @@ bool check_IP_datagramm(void* param){
         }
         if(isnumber(*str)){
             unsigned tmp=(unsigned)str->toInt();
-            if(tmp<=65535){
                 EEPROM.writeUInt(MODBUS_REGISTER_ADDRESS, tmp);
                 EEPROM.commit();
                 return true;
-            }
         }
         return false;
     }
@@ -288,11 +286,9 @@ bool check_IP_datagramm(void* param){
         }
         if(isnumber(*str)){
             unsigned tmp=(unsigned)str->toInt();
-            if(tmp>0 && tmp<=100){
                 EEPROM.writeUInt(MODBUS_REGISTER_NUMBER, tmp);
                 EEPROM.commit();
                 return true;
-            }
         }
         return false;
     }

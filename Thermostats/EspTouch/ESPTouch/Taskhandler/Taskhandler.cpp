@@ -43,7 +43,7 @@ void Taskhandler::Guitask(void*parameters){
     update->setSensor_Location(&data);
     if(data.getHeater()->getHeatingCircleHandler()[update->getSensorLocation()].getSensor()!=nullptr){
       TaskHandle_t core0;
-      xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 10000, update, 5, &core0, 0);
+      xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 10000,nullptr, 5, &core0, 0);
       GuiTask_main(update, &data);
       end_task_on_core_0=true;
       vTaskDelete(core0);
@@ -71,10 +71,10 @@ void Taskhandler::initTask(void*parameters){
 
 void Taskhandler::OtherTasks(void*parameters){
   //measure, wifi, autosave
-  MainTask *measuring=(MainTask*)parameters;
   DHT sensor(DHTPIN,DHTTYPE);
   sensor.begin();
   InitTask *autoSave=new InitTask();
+  MeasuringTask measure(&data);
   wifiTask wifi(&data);
   HeatingCommunicationTask Controlling(&data);
   Controlling.set_modbus_communication(data.getHeater()->get_modbus_data().get_ID(),data.getHeater()->get_modbus_data().get_address(),data.getHeater()->get_modbus_data().get_number());
@@ -82,10 +82,11 @@ void Taskhandler::OtherTasks(void*parameters){
   rtc.setTime(1, data.getTime()->getmin(), data.getTime()->gethour(), DAY, MONTH, YEAR);
          //          s   m   h+1  d    m      y
   while(!end_task_on_core_0){
-    measuring->measuring(&data, &sensor, &rtc);
+    measure.measurning(&sensor, &rtc);
     wifi.main();
     autoSave->save(&data);
     Controlling.Communicate_with_PLC();
+    //esp_task_wdt_reset();
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
   while(true){

@@ -49,7 +49,7 @@ bool DeviceComponents::remove_Component(String ip){
                 if(i<index){
                     tmp[i]=devices[i];
                 }
-                else{
+                else if(i>=index){
                     tmp[i]=devices[i+1];
                 }
             }

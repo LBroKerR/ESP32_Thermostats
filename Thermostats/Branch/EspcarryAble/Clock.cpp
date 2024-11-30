@@ -11,19 +11,13 @@
    //setter
   void Clock::setClock(unsigned Hour, unsigned Min){
     if(Hour>=0 && Hour<24){
-      if(hour!=Hour){
         hour=Hour;
-        hour_Changed=true;
-      }
     }
     else{
       hour=0;
     }
     if(Min>=0 && Min<60){
-      if(min!=Min){
         min=Min;
-        min_Changed=true;
-      }
     }
     else{
       min=0;

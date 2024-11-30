@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <XPT2046_Touchscreen.h>
+#include "esp_task_wdt.h"
 #include "MainTask.h"
 #include "DataHandler.h"
 #define USE_UI 1   

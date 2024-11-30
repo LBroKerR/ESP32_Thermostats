@@ -2,6 +2,7 @@
 #ifndef MODBUSHANDLER_H
 #define MODBUSHANDLER_H
 #include <ModbusMaster.h>
+//#include <SoftwareSerial.h>
 #include <Arduino.h>
 #include "HeatingCircleHandler.h"
 
@@ -10,29 +11,23 @@
 #define BAUDRATE 9600
 
 class modbusHandler{
-
-    unsigned slaveID;
-    ModbusMaster node;
-
-    uint16_t registerAddress;// 0x0001;  // Register address to read from
-    uint8_t numRegisters;  //2
-
-    uint8_t *messages;
-    unsigned number_of_msg;
-
 public:
+    // Konstruktor, amely beállítja a slave ID-t, a regiszter címét és a regiszterek számát
+    modbusHandler(uint8_t slaveID, uint16_t registerAddress, uint8_t numberOfRegisters);
 
-    modbusHandler();
-    modbusHandler(unsigned id, uint16_t register_address, uint8_t num_reg);
-    ~modbusHandler();
-
-    void add_msg(uint8_t);
-    void remove_msg(uint8_t);
-
-    void ACKmsgCheck();
+    // Függvény az adat küldésére
     void UsingModbus(uint8_t data);
 
+    // Függvény az adat küldésének állapotának ellenőrzésére
+    bool isSuccess();
 
+private:
+    ModbusMaster node;  // A ModbusMaster objektum
+    uint8_t slaveID;    // A slave ID
+    uint16_t registerAddress;  // A regiszter címe
+    uint8_t numberOfRegisters;  // A regiszterek száma
+    bool successFlag;   // A kommunikáció sikerességének nyomon követése
 };
+
 
 #endif //MODBUSHANDLER_H

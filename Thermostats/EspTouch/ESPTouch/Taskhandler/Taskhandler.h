@@ -11,12 +11,15 @@
 
 #include "DataHandler.h"
 
+#include "esp_task_wdt.h"
+
 #include "MainTask.h"
 #include "GuiTask.h"
 #include "SerialTask.h"
 #include "InitTask.h"
 #include "wifiTask.h"
 #include "HeatingCommunicationTask.h"
+#include "MeasuringTask.h"
 
 #define NUMBER_OF_TASKS_CORE1 3
 #define NUMBER_OF_TASKS_CORE0 1

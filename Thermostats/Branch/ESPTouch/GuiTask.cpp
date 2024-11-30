@@ -142,7 +142,7 @@ void GuiTask_main(MainTask* screens, DataHandler* data){
       task=changeTask(screens,data,ui_TmpChart_series_1, &screen_number);
       lv_timer_handler();
       is_user_interacted(data, &switch_of_screen);
-
+      //esp_task_wdt_reset();
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }

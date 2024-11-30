@@ -86,6 +86,7 @@ void Taskhandler::OtherTasks(void*parameters){
     wifi.main();
     autoSave->save(&data);
     Controlling.Communicate_with_PLC();
+    //esp_task_wdt_reset();
     vTaskDelay(100 / portTICK_PERIOD_MS);
   }
   while(true){
