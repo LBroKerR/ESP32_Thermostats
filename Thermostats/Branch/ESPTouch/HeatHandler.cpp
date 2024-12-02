@@ -117,9 +117,11 @@ void HeatHandler::remove_device_from_HeatingCircles(String ip){
         return;
     }
     for(unsigned i=0; i<number_of_HeatingCircles; i++){
-        if(HeatingCircles[i].getDevices()!=nullptr){
-            if(HeatingCircles[i].removeDevice(ip)){
-                break;
+        Serial.println(i);
+        if(HeatingCircles[i].getDevices()!=nullptr && HeatingCircles[i].getDevices()->getDevices()!=nullptr){
+            Serial.println("inner");
+            if(HeatingCircles[i].getDevices()->remove_Component(ip)){
+               break;
             }
         }
     }

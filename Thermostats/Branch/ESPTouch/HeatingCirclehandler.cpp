@@ -32,25 +32,6 @@ bool HeatingCircleHandler::addDevices(String const MACaddress, String const name
 DeviceComponents* HeatingCircleHandler::getDevices(){
   return devices;
 }
-//search existing device in the array. 
-//create a new array, copy every devices to it, except the one which waiting to be deleted.
-// delete old array, and point with it to the new one.
-bool HeatingCircleHandler::removeDevice(String ip){
-    if(devices==nullptr){
-        delete devices;
-        return false;
-    }
-    if(devices->getDevices()==nullptr ){
-        return false;
-    }
-    for(unsigned i=0; i<devices->getSize(); i++){
-        if(devices->getDevices()[i].get_ip()==ip){
-            devices->remove_Component(ip);
-            return true;
-        }
-    }
-    return false;
-}
 //create sensor object
 bool HeatingCircleHandler::addSensor(float offset, unsigned id, String name){
     if(measuring!=nullptr){
