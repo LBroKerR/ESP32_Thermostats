@@ -22,7 +22,6 @@ public:
 
     bool addDevices(String const Mac, String const name, float const temp, unsigned const ID, String ip );
     bool addSensor(float offset, unsigned id, String name);
-    bool removeDevice(String ip);
     DeviceComponents* getDevices();
     TemperatureMeasuring* getSensor();
 

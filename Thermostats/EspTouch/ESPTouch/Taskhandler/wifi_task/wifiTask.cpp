@@ -88,7 +88,7 @@ void wifiTask::client_server_activity_check(){
                 if(server->get_Clients()->get_status()[i]==false){
                     server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]+String(data->get_wifi_data()->get_host()));
                     data->getHeater()->remove_device_from_HeatingCircles(server->get_Clients()->get()[i]);
-                    //server->get_Clients()->Del(server->get_Clients()->get()[i]);
+                    server->get_Clients()->Del(server->get_Clients()->get()[i]);
                 }
             }
         }

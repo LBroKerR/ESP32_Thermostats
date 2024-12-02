@@ -1,13 +1,32 @@
 #include "Components.h"
 
 Components::Components(){
-
+   ui_Device_Template =nullptr;
+   ui_Device_TemplateMAC=nullptr;
+   ui_Device_TemplateName=nullptr;
+   ui_Temp_template=nullptr;
+   temp=0.0;
+   ID=0;
+   IP="null";
 }
 Components::~Components(){
- lv_obj_del(ui_Device_TemplateMAC);
- lv_obj_del(ui_Device_TemplateName);
- lv_obj_del(ui_Temp_template);
- lv_obj_del(ui_Device_Template);
+    if(ui_Device_TemplateMAC){
+        lv_obj_del(ui_Device_TemplateMAC);
+        ui_Device_TemplateMAC=nullptr;
+    }
+    if(ui_Temp_template){
+        lv_obj_del(ui_Temp_template);
+        ui_Temp_template=nullptr;
+    }
+    if(ui_Device_TemplateName){
+        lv_obj_del(ui_Device_TemplateName);
+        ui_Device_TemplateName=nullptr;
+    }
+    // Ellenőrzés, mielőtt törölsz
+    if (ui_Device_Template) {
+        lv_obj_del(ui_Device_Template);  // Töröld magát az objektumot
+        ui_Device_Template = nullptr;
+    }
 }
 
 void Components::fillout(String Mac, String Name, float Temp, int y_pos, unsigned id){

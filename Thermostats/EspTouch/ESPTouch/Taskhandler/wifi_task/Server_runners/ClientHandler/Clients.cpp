@@ -113,10 +113,12 @@ bool *Clients::get_status(){
     return status;
 }
 void Clients::set_status(bool state, unsigned id){
-    for(unsigned i=0; i< size; i++){
-        if(id==ids[i]){
-            status[i]=state;
-            return;
+    if(IPs!=nullptr && ids!=nullptr && status!=nullptr){
+        for(unsigned i=0; i< size; i++){
+            if(id==ids[i]){
+                status[i]=state;
+                return;
+            }
         }
     }
 }
