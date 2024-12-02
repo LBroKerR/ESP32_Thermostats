@@ -50,8 +50,7 @@ public:
   void set_active_program(String);
   void set_wanted_temp(String);
   void set_heating_switch(String);
-  void set_time_hour(String);
-  void set_time_min(String);
+  void set_time(String, String);
 
   void proccess_received_data();
 

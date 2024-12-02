@@ -12,6 +12,7 @@ class Clock{
     unsigned min;
     bool hour_Changed;
     bool min_Changed;
+    bool read_write_access;
 
 public:
     Clock():hour(0),min(0),hour_Changed(false),min_Changed(false){}
@@ -29,6 +30,9 @@ public:
 
     bool getmin(unsigned*print);
     bool gethour(unsigned* print);
+
+    bool get_access()const;
+    void set_access(bool const);
 
 
 };

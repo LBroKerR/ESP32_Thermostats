@@ -11,8 +11,9 @@ void MainTask::setData(DataHandler* param){
         data=param;
 }
 void MainTask::print(Adafruit_SSD1306 *display, ESP32Time *rtc){
-  unsigned min=rtc->getMinute();
-  unsigned hour=rtc->getHour(true);
+    if(data->getTime()->get_access() && !data->get_wifi_data()->get_switch()){
+     data->getTime()->setClock(rtc->getHour(true),rtc->getMinute());
+    }
     display->setTextColor(SSD1306_WHITE);
     display->clearDisplay();
     display->setTextSize(SIZE1);
@@ -23,22 +24,22 @@ void MainTask::print(Adafruit_SSD1306 *display, ESP32Time *rtc){
     display->setCursor(HMDPERCEN_X, HMDPERCEN);
     display->print("%");
     display->setCursor(CLOCK_HOUR_X, CLOCK_Y );
-    if(hour>=10){
-      display->print(hour);
+    if(data->getTime()->gethour()>=10){
+      display->print(data->getTime()->gethour());
     }
     else{
       display->print("0");
-      display->print(hour);
+      display->print(data->getTime()->gethour());
     }
     display->setCursor( CLOCK_DOTS_X, CLOCK_Y );
     display->print(":");
     display->setCursor(CLOCK_MIN_X, CLOCK_Y );
-    if(min>=10){
-      display->print(min);
+    if(data->getTime()->getmin()>=10){
+      display->print(data->getTime()->getmin());
     }
     else{
       display->print("0");
-      display->print(min);
+      display->print(data->getTime()->getmin());
     }
     display->setTextSize(SIZE2);
     display->setCursor(TMPC_X, TMPC_Y);// x,y
