@@ -82,14 +82,11 @@ void wifiTask::set_heating_switch(String str){
         }
     }
 }
-void wifiTask::set_time_hour(String str){
-    if(str!=""){
-        data->getTime()->setClock(str.toInt(), data->getTime()->getmin());
-    }
-}
-void wifiTask::set_time_min(String str){
-    if(str!=""){
-       data->getTime()->setClock(data->getTime()->gethour(),str.toInt());
+void wifiTask::set_time(String hour, String min){
+    if(hour!="" && min!=""){
+        data->getTime()->set_access(false);
+        data->getTime()->setClock(hour.toInt(), min.toInt());
+        data->getTime()->set_access(true);
     }
 }
 
@@ -106,8 +103,7 @@ void wifiTask::proccess_received_data(){
                 set_wanted_temp(String((const char*)msg[WANTED_TEMP]));
                 set_heating_switch(String((const char*)msg[String(HEATINGCIRCLE_SWITCH)+String(data->getSensor()->getHeatingCircleID())]));
                 //Serial.println(String(HEATINGCIRCLE_SWITCH)+String(data->getSensor()->getHeatingCircleID()));
-                set_time_hour(String((const char*)msg[TIME_HOUR]));
-                set_time_min(String((const char*)msg[TIME_MIN]));
+                set_time(String((const char*)msg[TIME_HOUR]),String((const char*)msg[TIME_MIN]));
 
             }
             server->get_received_data()->remove_msg(i);

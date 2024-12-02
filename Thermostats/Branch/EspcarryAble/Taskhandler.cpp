@@ -42,8 +42,10 @@ void Taskhandler::Maintask(void*parameters){
     xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 10000, NULL, 1, &core0, 0);
     MainTask *Task=new MainTask();
     ESP32Time rtc;
-    rtc.setTime(1, data.getTime()->getmin(), data.getTime()->gethour(), DAY, MONTH, YEAR);
+    if(data.get_wifi_data()->get_switch()){
+      rtc.setTime(1, data.getTime()->getmin(), data.getTime()->gethour(), DAY, MONTH, YEAR);
          //          s   m   h+1  d    m      y
+    }
     Task->main(&data, &rtc);
     delay(100);
     delete Task;

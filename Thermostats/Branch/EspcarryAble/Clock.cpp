@@ -4,6 +4,7 @@
     setClock(h,m);
     hour_Changed=false;
     min_Changed=false;
+    read_write_access=true;
    }
    Clock::~Clock(){
    }
@@ -62,4 +63,10 @@ bool Clock::getmin(unsigned*print){
         return true;
     }
     return false;
+}
+bool Clock::get_access()const{
+  return read_write_access;
+}
+void Clock::set_access(bool const param){
+  read_write_access=param;
 }
