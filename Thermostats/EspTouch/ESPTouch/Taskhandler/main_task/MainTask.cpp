@@ -145,9 +145,6 @@ void MainTask::upgrade_Screen3(DataHandler*data){//options -> heating mode
   if(data->getHeater()->getHeatingMode()!= (bool)lv_dropdown_get_selected(ui_HeatSetting)){
     data->getHeater()->setHeatingMode((bool)lv_dropdown_get_selected(ui_HeatSetting));
   }
-  else{
-    data->getHeater()->set_heatingMode_changed(false);
-  }
 }
 void MainTask::upgrade_Screen4(DataHandler*data){//external devices -> dynamic deviceses components!
   unsigned size=0;
