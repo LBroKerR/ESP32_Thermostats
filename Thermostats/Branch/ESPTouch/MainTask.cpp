@@ -9,7 +9,8 @@ void MainTask::update_wtmp(DataHandler*data){
     //if arc modify value or hour change-> send data to carryable
     //if hour change-> auto!
 
-  if(auto_flag){//auto
+  if(auto_flag || data->getProg()->get_ProgHour_index()!=data->getTime()->gethour()){//auto
+    data->getProg()->set_ProgHour_index(data->getTime()->gethour());
     data->getProg()->set_Wanted_temp(data->getProg()->get_program_element(data->getTime()->gethour()));
     lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0));
     lv_label_set_text(ui_AutoManual, "Auto");
@@ -144,9 +145,6 @@ void MainTask::upgrade_Screen2(DataHandler*data, lv_chart_series_t * ui_TmpChart
 void MainTask::upgrade_Screen3(DataHandler*data){//options -> heating mode
   if(data->getHeater()->getHeatingMode()!= (bool)lv_dropdown_get_selected(ui_HeatSetting)){
     data->getHeater()->setHeatingMode((bool)lv_dropdown_get_selected(ui_HeatSetting));
-  }
-  else{
-    data->getHeater()->set_heatingMode_changed(false);
   }
 }
 void MainTask::upgrade_Screen4(DataHandler*data){//external devices -> dynamic deviceses components!

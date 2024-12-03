@@ -137,11 +137,16 @@ void GuiTask_main(MainTask* screens, DataHandler* data){
   lv_chart_series_t * ui_TmpChart_series_1 = lv_chart_add_series(ui_TmpChart, lv_color_hex(0x19ACBA),LV_CHART_AXIS_PRIMARY_Y);
   screens->init_screens_datas(data, ui_TmpChart_series_1);
   bool task=true;
+  uint i=0;
   while(task){
 
       task=changeTask(screens,data,ui_TmpChart_series_1, &screen_number);
       lv_timer_handler();
       is_user_interacted(data, &switch_of_screen);
+      i++;
+      if(i>=1000){
+        i=0;
+      }
       //esp_task_wdt_reset();
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }

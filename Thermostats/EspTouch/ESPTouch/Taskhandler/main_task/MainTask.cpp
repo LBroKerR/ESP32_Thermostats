@@ -9,7 +9,8 @@ void MainTask::update_wtmp(DataHandler*data){
     //if arc modify value or hour change-> send data to carryable
     //if hour change-> auto!
 
-  if(auto_flag){//auto
+  if(auto_flag || data->getProg()->get_ProgHour_index()!=data->getTime()->gethour()){//auto
+    data->getProg()->set_ProgHour_index(data->getTime()->gethour());
     data->getProg()->set_Wanted_temp(data->getProg()->get_program_element(data->getTime()->gethour()));
     lv_arc_set_value(ui_WtmpARC,(data->getProg()->get_Wanted_temp()*10.0));
     lv_label_set_text(ui_AutoManual, "Auto");
