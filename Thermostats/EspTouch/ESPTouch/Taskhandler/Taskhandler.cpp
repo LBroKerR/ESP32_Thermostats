@@ -43,7 +43,7 @@ void Taskhandler::Guitask(void*parameters){
     update->setSensor_Location(&data);
     if(data.getHeater()->getHeatingCircleHandler()[update->getSensorLocation()].getSensor()!=nullptr){
       TaskHandle_t core0;
-      xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 30000,nullptr, 5, &core0, 0);
+      xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 12000,nullptr, 5, &core0, 0);
       GuiTask_main(update, &data);
       end_task_on_core_0=true;
       vTaskDelete(core0);

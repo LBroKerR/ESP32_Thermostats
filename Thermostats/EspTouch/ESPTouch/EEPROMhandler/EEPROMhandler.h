@@ -24,7 +24,8 @@
     #define NICKNAME         0x0059 //string
     #define NAMESIZE         0x0009
     #define HEATING_CIRLE_ID 0x0063 //unsigned
-    #define NUMBER_OF_HEATING_CIRLE 0x0067
+    #define NUMBER_OF_HEATING_CIRLE 0x0067 //uint
+    #define EEPROM_CRASHED   0x0070 //double
 #endif
 #if(ESPTOUCH && !ESPCARRY)
     #define EEPROM_SIZE      0x0450 // 84 byte needed-> allocate 128 byte
@@ -56,6 +57,7 @@
     #define MODBUS_ID        0x0429                //uint
     #define MODBUS_REGISTER_ADDRESS   0x042D              //uint
     #define MODBUS_REGISTER_NUMBER    0x0431               //uint
+    #define EEPROM_CRASHED   0x0438 //double
 #endif
 
 
@@ -115,6 +117,8 @@
     unsigned get_modbus_register_number();
 #endif
 
+    void EEPROM_CLEARED();
+    double is_EEPROM_crashed();
 
 #endif //EEPROMHANDLER_H
 

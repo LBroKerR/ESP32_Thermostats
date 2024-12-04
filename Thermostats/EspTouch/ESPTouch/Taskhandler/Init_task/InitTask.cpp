@@ -136,11 +136,17 @@
     DataHandler *InitTask::main(DataHandler*parameters){
       EEPROM.begin(EEPROM_SIZE);
       delay(100);
+      String pass="null";
+      if(is_EEPROM_crashed()!=0.0){
+        check_pass_datagramm((void*)&pass);
+        Hardreset((void*)&pass);
+        EEPROM_CLEARED();
+      }
       parameters=WifiInit(parameters);
       parameters=DataInit(parameters);
       delay(100);
       EEPROM.end();
-      //print(parameters);
+      print(parameters);
       return parameters;
     }
     void InitTask::save(DataHandler*parameters){
