@@ -1,0 +1,26 @@
+name: Update README with License
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Append License to README
+        run: |
+          echo "## License" > README.md
+          cat LICENSE >> README.md
+          
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add README.md
+          git commit -m "Update README with license"
+          git push
