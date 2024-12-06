@@ -1,4 +1,4 @@
-# includes libraries
+# included libraries
     - Arduino_JSON
     - AsyncTCP
     - DHT_kxn
