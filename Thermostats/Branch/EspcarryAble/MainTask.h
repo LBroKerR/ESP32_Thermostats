@@ -6,8 +6,12 @@
 #include "DataHandler.h"
 #include <ESP32Time.h>
 
+#define MEASURED_NUMBER 10
+
 class MainTask{
     DataHandler* data;
+    float temp[MEASURED_NUMBER];
+    unsigned measrued_index;
 public:
     MainTask();
     ~MainTask();

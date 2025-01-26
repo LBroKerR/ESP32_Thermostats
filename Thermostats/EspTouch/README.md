@@ -13,3 +13,9 @@ includes files only work with this hardware. Study this GitHub page before editi
 
 
 GUI- graphical user interface - design are created in Squarline studio. Code generetad here. Database and GUI connected by hand coding in main_task
+
+
+There are some bug, what needs to be fixed:
+
+    espCarryable sends prog number, and espTouch overwrite it main_task
+    espTouch program srceen doesnt refressing while user doent touch the slider. 

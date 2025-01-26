@@ -1,0 +1,11 @@
+wifi communication check!
+
+create modbushandler object! -> done!
+	send
+	receive
+
+----------------------------------
+
+component deleting running to unhandled nullpointer. wifitask-> to database. Check function path!
+
+

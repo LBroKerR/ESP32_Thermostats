@@ -5,6 +5,8 @@
 #include "HeatingCircleHandler.h"
 #include "Modbus_data.h"
 
+#include "bool_mutex.h"
+
 #define HEATING_ON true
 #define HEATING_OFF false
 
@@ -13,8 +15,8 @@ class HeatHandler{
     HeatingCircleHandler* HeatingCircles;
     Modbus_data modbusData;
     unsigned number_of_HeatingCircles;
-    bool *status;
-    bool heatingMode;
+    bool_mutex *status;
+    bool_mutex heatingMode;
     bool heatingMode_changed;
 
 public:
@@ -36,10 +38,10 @@ public:
 
     //from designed gui
     void setHeatingMode(bool const );
-    bool getHeatingMode()const;
+    bool getHeatingMode(bool*);
     void get_HeatingCircles_status(float );
     unsigned get_number_of_HeatingCircles();
-    bool* getStatus();
+    bool_mutex* getStatus();
 
     bool get_heatingMode_changed()const;
     void set_heatingMode_changed(bool const);

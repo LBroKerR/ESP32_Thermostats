@@ -1,0 +1,12 @@
+wifi communication check!
+
+create modbushandler object! -> done!
+	send
+	receive
+
+----------------------------------
+
+EEPROMhandler -> add variable handler function to handler, and create menu and function calling in serailTask
+initTask -> read variable from eeprom and set up the modbus communication.
+
+

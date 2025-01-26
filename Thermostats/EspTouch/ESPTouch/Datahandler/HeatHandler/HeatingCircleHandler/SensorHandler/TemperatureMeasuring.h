@@ -4,11 +4,14 @@
 
 #include <Arduino.h>
 
+#include "float_mutex.h"
+#include "uint_mutex.h"
+
 class TemperatureMeasuring{
 
     float SensorOffset;
-    float MeasuredTemp;
-    unsigned MeasureHmd;
+    float_mutex MeasuredTemp;
+    uint_mutex MeasureHmd;
     unsigned HeatingCircleID;
     String nickName;
     bool tempChanged;
@@ -26,8 +29,8 @@ public:
 
     String getNickName()const;
     unsigned getHeatingCircleID()const;
-    float getMeasuredTemperature()const;
-    unsigned getMeasureHmd()const;
+    bool getMeasuredTemperature(float*);
+    bool getMeasureHmd(unsigned*);
     bool get_tempChange()const;
     bool get_hmdchange()const;
 

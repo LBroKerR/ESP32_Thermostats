@@ -2,6 +2,10 @@
 
    MainTask:: MainTask(){
     data=nullptr;
+    for (unsigned i = 0; i < MEASURED_NUMBER; i++){
+      temp[i]=0.0;
+    }
+    unsigned measrued_index=0;
    }
    MainTask:: ~MainTask(){
 
@@ -76,17 +80,26 @@ void  MainTask::buttonInteraction(Buttons* button){
   progbutt=button->progchange();
   if(!progbutt){
     wtmp_button=button->tempchange(STEP);
-    if(wtmp_button!=0.0){
+    //if(wtmp_button!=0.0){
       data->getProg()->set_Wanted_temp(button->tempchange(STEP));
-    }
+    //}
   }
   else {
     data->getProg()->set_active_program_index(progbutt);
   }
 }
 void MainTask::measure(DHT*sensor){
-  data->getSensor()->measuring(sensor->readTemperature(), sensor->readHumidity());
-
+  float tmp=0.0;
+  temp[measrued_index]=sensor->readTemperature();
+  measrued_index++;
+  for (unsigned i = 0; i < MEASURED_NUMBER; i++){
+    tmp+=temp[i];
+  }
+  tmp=tmp/MEASURED_NUMBER;
+  data->getSensor()->measuring(tmp, sensor->readHumidity());
+  if(measrued_index>=MEASURED_NUMBER){
+    measrued_index=0;
+  }
 }
 bool MainTask::SerialExit(Buttons* button,Adafruit_SSD1306 *display){
   bool output=false;

@@ -15,6 +15,7 @@ class programs{
 
     float Wanted_temp;
     bool wtmp_changed;
+    bool wtmp_help;
 public:
     programs();
     ~programs();

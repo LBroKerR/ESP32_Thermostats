@@ -1,13 +1,10 @@
 #include "Components.h"
 
 Components::Components(){
-   ui_Device_Template =nullptr;
-   ui_Device_TemplateMAC=nullptr;
-   ui_Device_TemplateName=nullptr;
-   ui_Temp_template=nullptr;
    temp=0.0;
    ID=0;
    IP="null";
+   temp_str="null";
 }
 Components::~Components(){
     if(ui_Device_TemplateMAC){
@@ -69,10 +66,12 @@ void Components::fillout(String Mac, String Name, float Temp, int y_pos, unsigne
     ID=id;
 }
 
-void  Components::updata_temp(float Temp){
-    temp=Temp;
-    String strTemp=String(temp,1)+" °C";
-    lv_label_set_text(ui_Temp_template, strTemp.c_str());
+void Components::updata_temp(float Temp) {
+    if (temp != Temp) {
+        temp = Temp;
+        temp_str=String(temp,1)+" °C";
+        lv_label_set_text(ui_Temp_template, temp_str.c_str());
+    }
 }
 void  Components::updata_pos(int pos){
     lv_obj_set_y(ui_Device_Template, pos);
@@ -87,7 +86,9 @@ float Components::getTemp(){
     return temp;
 }
 void Components::set_ip(String ip){
-    IP=ip;
+    if(IP!=ip){
+        IP=ip;
+    }
 }
 String Components::get_ip()const{
     return IP;

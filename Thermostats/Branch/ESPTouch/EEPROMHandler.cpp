@@ -355,8 +355,8 @@ bool check_IP_datagramm(void* param){
             EEPROM.commit();
 #if(ESPTOUCH && !ESPCARRY)
             *str="1";
-            check_ID_datagramm((void*)str);
             check_number_of_heating_circle_datagramm((void*)str);
+            check_ID_datagramm((void*)str);
             double tmp[24];
             for(unsigned i=0; i<24; i++){tmp[i]=15.5;};
             for(unsigned i=0;i < 5; i++){
@@ -507,5 +507,13 @@ bool check_IP_datagramm(void* param){
     }
     unsigned get_modbus_register_number(){
          return EEPROM.readUInt(MODBUS_REGISTER_NUMBER);
+    }
+
+    void EEPROM_CLEARED(){
+        EEPROM.writeDouble(EEPROM_CRASHED, 0.0);
+        EEPROM.commit();
+    }
+    double is_EEPROM_crashed(){
+        return EEPROM.readDouble(EEPROM_CRASHED);
     }
 #endif

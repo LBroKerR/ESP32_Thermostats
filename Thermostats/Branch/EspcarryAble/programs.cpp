@@ -5,6 +5,7 @@
         active_program_index_changed=false;
         Wanted_temp=DEFAULT_TEMP;
         wtmp_changed=false;
+        wtmp_help=false;
     }
 
     programs::~programs(){
@@ -37,14 +38,18 @@
       }
     }
     void programs::set_wtmp(float param){
-      if(param>=MIN_TEMP && param<=MAX_TEMP){
+      if(param>=MIN_TEMP && param<=MAX_TEMP && !wtmp_help){
         Wanted_temp=param;
       }
     }
     void programs::set_Wanted_temp(float const param){
         if((Wanted_temp+param)>=MIN_TEMP && (Wanted_temp+param)<=MAX_TEMP && param!= 0.0){
+            wtmp_help=true;
             Wanted_temp+=param;
             set_wtmp_changed(true);
+        }
+        if(param==0.0){
+          wtmp_help=false;
         }
     }
     void programs::set_active_program_index_changed(bool const param){

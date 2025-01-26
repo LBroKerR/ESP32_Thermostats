@@ -2,19 +2,23 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
+#include "uint_mutex.h"
+#include "bool_mutex.h"
+
+
 #define YEAR    2024
 #define MONTH   9
 #define DAY     18
 #define UTC_MINUS_1 3600
 
 class Clock{
-    unsigned hour;
-    unsigned min;
-    bool hour_Changed;
-    bool min_Changed;
+    uint_mutex hour;
+    uint_mutex min;
+    bool_mutex hour_Changed;
+    bool_mutex min_Changed;
 
 public:
-    Clock():hour(0),min(0),hour_Changed(false),min_Changed(false){}
+    Clock();
     Clock(unsigned h, unsigned m);
     ~Clock();
 
@@ -22,13 +26,13 @@ public:
     void set_hour_Changed(bool);
     void set_min_Changed(bool);
 
-    unsigned gethour()const;
-    unsigned getmin()const;
-    bool get_hour_Changed()const;
-    bool get_min_Changed()const;
+    bool gethour(unsigned*);
+    bool getmin(unsigned*);
+    bool get_hour_Changed();
+    bool get_min_Changed();
 
-    bool getmin(unsigned*print);
-    bool gethour(unsigned* print);
+    //bool getmin(unsigned*print);
+    //bool gethour(unsigned* print);
 
 
 };

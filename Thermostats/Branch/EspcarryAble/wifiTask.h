@@ -10,7 +10,7 @@
 #include "JavaScript.h"
 #include "styles.h"
 
-#define TIMER_DELAY 5000
+#define TIMER_DELAY 490
 
 #define SIMPLE_TAG "simple tag"
 #define TEMPERATURE "temp_"

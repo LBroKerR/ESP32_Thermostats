@@ -24,7 +24,7 @@
 #define DATA 1
 
 // tmp sensor type, and pin
-#define DHTTYPE DHT21
+#define DHTTYPE DHT11
 #define DHTPIN 25
 
 //buttons data pins 

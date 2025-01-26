@@ -50,24 +50,39 @@ void wifiTask::init_html_page(){
 
 void wifiTask::set_Json_messages(){
     JSONVar msg;
-                    //var_name, var_value
-    if(data->getProg()->get_server_update_prog_index() || server->get_new_client()){
-        msg[ACTIVE_PROGRAM_SLAVE]=String(data->getProg()->get_active_program_index()+1);
-        data->getProg()->set_server_update_prog_index(false);
+    float tmp_Fvar=0.0;
+    unsigned tmp_Uvar=0;
+    bool tmp_bvar=false;
+    if(data->getProg()->get_active_program_index(&tmp_Uvar)){
+        msg[ACTIVE_PROGRAM]=String(tmp_Uvar+1);
+        if(data->getProg()->get_server_update_prog_index() || server->get_new_client()){
+            msg[ACTIVE_PROGRAM_SLAVE]=String(tmp_Uvar+1);
+            data->getProg()->set_server_update_prog_index(false);
+        }
     }
-    if(data->getProg()->get_server_update_wtmp() || server->get_new_client()){
-        msg[WANTED_TEMP_SLAVE]=String(data->getProg()->get_Wanted_temp(),1);
-        data->getProg()->set_server_update_wtmp(false);
+    if(data->getProg()->get_Wanted_temp(&tmp_Fvar)){
+        msg[WANTED_TEMP]=String(tmp_Fvar,1);
+        if(data->getProg()->get_server_update_wtmp() || server->get_new_client()){
+            msg[WANTED_TEMP_SLAVE]=String(tmp_Fvar,1);
+            data->getProg()->set_server_update_wtmp(false);
+        }
     }
-    msg[ACTIVE_PROGRAM]=String(data->getProg()->get_active_program_index()+1);
-    msg[WANTED_TEMP]=String(data->getProg()->get_Wanted_temp(),1);
-    msg[TEMPERARTURE]=String(data->getHeater()->getHeatingCircleHandler()[sensor_location].getSensor()->getMeasuredTemperature(),1);
-    msg[HUMADITY]=String(data->getHeater()->getHeatingCircleHandler()[sensor_location].getSensor()->getMeasureHmd());
-    msg[TIME_HOUR]=String(data->getTime()->gethour());
-    msg[TIME_MIN]=String(data->getTime()->getmin());
+    if(data->getHeater()->getHeatingCircleHandler()[sensor_location].getSensor()->getMeasuredTemperature(&tmp_Fvar)){
+        msg[TEMPERARTURE]=String(tmp_Fvar,1);
+    }
+    if(data->getHeater()->getHeatingCircleHandler()[sensor_location].getSensor()->getMeasureHmd(&tmp_Uvar)){
+        msg[HUMADITY]=String(tmp_Uvar);
+    }
+    if(data->getTime()->gethour(&tmp_Uvar)){
+        msg[TIME_HOUR]=String(tmp_Uvar);
+    }
+    if(data->getTime()->getmin(&tmp_Uvar)){
+        msg[TIME_MIN]=String(tmp_Uvar);
+    }
     if(data->getHeater()!=nullptr){
         for (unsigned i = 0; i < data->getHeater()->get_number_of_HeatingCircles(); i++){
-            if(data->getHeater()->getStatus()[i]){
+            data->getHeater()->getStatus()[i].get_variable(&tmp_bvar);
+            if(tmp_bvar){
                 msg[String(HEATINGCIRCLE_SWITCH)+String(i)]=String("ON");
             }
             else{
@@ -88,7 +103,7 @@ void wifiTask::client_server_activity_check(){
                 if(server->get_Clients()->get_status()[i]==false){
                     server->get_Page()->remove_list_elem(server->get_Clients()->get()[i]+String(data->get_wifi_data()->get_host()));
                     data->getHeater()->remove_device_from_HeatingCircles(server->get_Clients()->get()[i]);
-                    server->get_Clients()->Del(server->get_Clients()->get()[i]);
+                  //  server->get_Clients()->Del(server->get_Clients()->get()[i]);
                 }
             }
         }
@@ -96,8 +111,10 @@ void wifiTask::client_server_activity_check(){
 }
 
 void wifiTask::set_active_prog(String str){
+    unsigned tmp=0;
     if(str!=""){
-        data->getProg()->set_received_index(str.toInt(), data->getTime()->gethour());
+        data->getTime()->gethour(&tmp);
+        data->getProg()->set_received_index(str.toInt(), tmp);
     }
 }
 void wifiTask::set_wtmp(String str){
@@ -170,23 +187,23 @@ void wifiTask::main(){
 
   // send time with data. 
   //send data if something changed
-if(data->get_wifi_data()->get_switch()){
-    if ((millis() - lastTime) > timerDelay) {
-        if(server->get_Clients()!=nullptr){
-            set_Json_messages();
-            server->updata();
+    if(data->get_wifi_data()->get_switch()){
+        if ((millis() - lastTime) > timerDelay) {
+            if(server->get_Clients()!=nullptr){
+                set_Json_messages();
+                server->updata();
+            }
+            lastTime = millis();
         }
-        lastTime = millis();
+        if(!function_selector){
+            proccess_received_data();
+            function_selector=true;
+        }
+        else{
+        //nullptr not handled in this funcs. Check all the funcs in there.
+            client_server_activity_check();//may be wdt reseting here 
+            function_selector=false;
+        }
+        server->run_server();
     }
-      if(!function_selector){
-        proccess_received_data();
-        function_selector=true;
-      }
-      else{
-      //nullptr not handled in this funcs. Check all the funcs in there.
-        client_server_activity_check();//may be wdt reseting here 
-        function_selector=false;
-      }
-    server->run_server();
-}
 }

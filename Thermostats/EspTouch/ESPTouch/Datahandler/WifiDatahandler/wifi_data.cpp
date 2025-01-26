@@ -27,7 +27,7 @@ bool wifi_data::get_switch()const{
     return Switch;
 }
 void wifi_data::set_ip(String param){
-    ip =param;
+    ip = param;
 }
 String wifi_data::get_ip(){
     return ip;

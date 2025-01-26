@@ -25,7 +25,9 @@
         obj->getProg()->set_programs(alprogs,i);
       }
       obj->getProg()->set_active_program_index(active_prog);
-      obj->getProg()->set_Wanted_temp( obj->getProg()->get_program_element( obj->getTime()->gethour() ) );
+      unsigned hour=0;
+      obj->getTime()->gethour(&hour);
+      obj->getProg()->set_Wanted_temp( obj->getProg()->get_program_element( hour ) );
       return obj;
     }
     DataHandler* InitTask::ClockInit(DataHandler *obj){
@@ -36,7 +38,7 @@
     }
     DataHandler* InitTask::HeaterInit(DataHandler *obj){
       unsigned heating_circle_Number_ID=0; // how many heating circle will be implemented
-      unsigned id=0; // tells where to belong among in heating circle 
+      unsigned id=0; // tells where to belong among in heating circles
       // id>0 and id<=heating_circle_Number_ID
       float offset=getOffset();
       String name=getName();
@@ -54,21 +56,32 @@
       obj=ClockInit(obj);
       obj=HeaterInit(obj);
       obj=ProgInit(obj);
-      obj->getProg()->set_ProgHour_index(obj->getTime()->gethour());
+      unsigned hour_tmp=0;
+      obj->getTime()->gethour(&hour_tmp);
+      obj->getProg()->set_ProgHour_index(hour_tmp);
       return obj;
     }
     void InitTask::saveData(DataHandler*obj){
       //prog index, progs, hour, min
+      unsigned hour_tmp=0, min_tmp=0, prog_tmp=0;
+      bool mode_tmp=false;
       if(obj->getTime()->get_hour_Changed() || obj->getTime()->get_min_Changed()){
-        write_out_clock(obj->getTime()->gethour(),obj->getTime()->getmin());
-      if(obj->getTime()->get_hour_Changed()){
-        obj->getProg()->set_Wanted_temp(obj->getProg()->get_program_element(obj->getTime()->gethour()));
-      }
+
+        obj->getTime()->gethour(&hour_tmp);
+        obj->getTime()->getmin(&min_tmp);
+        write_out_clock(hour_tmp,min_tmp);
+
+        if(obj->getTime()->get_hour_Changed()){
+          obj->getProg()->set_Wanted_temp(obj->getProg()->get_program_element(hour_tmp));
+        }
         obj->getTime()->set_hour_Changed(false);
         obj->getTime()->set_min_Changed(false);
       }
-        write_out_active_program_number(obj->getProg()->get_active_program_index());
-      save_heating_mode(obj->getHeater()->getHeatingMode());
+      obj->getProg()->get_active_program_index(&prog_tmp);
+      write_out_active_program_number(prog_tmp);
+
+      obj->getHeater()->getHeatingMode(&mode_tmp);
+      save_heating_mode(mode_tmp);
       if(obj->getProgSave()){
         double tmp[24];
         for(unsigned i=0; i<5;i++){
@@ -80,7 +93,7 @@
         obj->setProgSave(false);
       }
     }
-   void InitTask::print(DataHandler*parameters){
+/*   void InitTask::print(DataHandler*parameters){
     Serial.begin(115200);
     delay(100);
     String str=" ";
@@ -132,7 +145,7 @@
     }
     delay(100);
     Serial.end();
-   }
+   }*/
     DataHandler *InitTask::main(DataHandler*parameters){
       EEPROM.begin(EEPROM_SIZE);
       delay(100);
@@ -146,7 +159,7 @@
       parameters=DataInit(parameters);
       delay(100);
       EEPROM.end();
-      print(parameters);
+      //print(parameters);
       return parameters;
     }
     void InitTask::save(DataHandler*parameters){

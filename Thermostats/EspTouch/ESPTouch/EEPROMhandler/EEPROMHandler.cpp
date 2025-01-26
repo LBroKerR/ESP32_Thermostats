@@ -508,7 +508,7 @@ bool check_IP_datagramm(void* param){
     unsigned get_modbus_register_number(){
          return EEPROM.readUInt(MODBUS_REGISTER_NUMBER);
     }
-#endif
+
     void EEPROM_CLEARED(){
         EEPROM.writeDouble(EEPROM_CRASHED, 0.0);
         EEPROM.commit();
@@ -516,3 +516,4 @@ bool check_IP_datagramm(void* param){
     double is_EEPROM_crashed(){
         return EEPROM.readDouble(EEPROM_CRASHED);
     }
+#endif

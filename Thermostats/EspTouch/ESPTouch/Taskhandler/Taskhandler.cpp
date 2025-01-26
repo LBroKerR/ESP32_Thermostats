@@ -43,7 +43,7 @@ void Taskhandler::Guitask(void*parameters){
     update->setSensor_Location(&data);
     if(data.getHeater()->getHeatingCircleHandler()[update->getSensorLocation()].getSensor()!=nullptr){
       TaskHandle_t core0;
-      xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 12000,nullptr, 5, &core0, 0);
+      xTaskCreatePinnedToCore(Taskhandler::OtherTasks, "core0", 5000,nullptr, 5, &core0, 0);
       GuiTask_main(update, &data);
       end_task_on_core_0=true;
       vTaskDelete(core0);
@@ -79,7 +79,10 @@ void Taskhandler::OtherTasks(void*parameters){
   HeatingCommunicationTask Controlling(&data);
   Controlling.set_modbus_communication(data.getHeater()->get_modbus_data().get_ID(),data.getHeater()->get_modbus_data().get_address(),data.getHeater()->get_modbus_data().get_number());
   ESP32Time rtc;
-  rtc.setTime(1, data.getTime()->getmin(), data.getTime()->gethour(), DAY, MONTH, YEAR);
+  unsigned hour_tmp=0, min_tmp=0;
+  data.getTime()->getmin(&min_tmp);
+  data.getTime()->gethour(&hour_tmp);
+  rtc.setTime(1, min_tmp, hour_tmp, DAY, MONTH, YEAR);
          //          s   m   h+1  d    m      y
   while(!end_task_on_core_0){
     measure.measurning(&sensor, &rtc);
@@ -99,7 +102,7 @@ void Taskhandler::OtherTasks(void*parameters){
 
 
 void Taskhandler::main(){
-  xTaskCreatePinnedToCore(Taskhandler::initTask, "core1", 10000, &myQueue1, 5, &core1, 1);
-  xTaskCreatePinnedToCore(Taskhandler::Guitask, "core1", 10000, &myQueue1, 5, &core1, 1);
-  xTaskCreatePinnedToCore(Taskhandler::BIOSTask, "core1", 10000, &myQueue1, 5, &core1, 1);
+  xTaskCreatePinnedToCore(Taskhandler::initTask, "core1", 5000, &myQueue1, 5, &core1, 1);
+  xTaskCreatePinnedToCore(Taskhandler::Guitask, "core1", 5000, &myQueue1, 5, &core1, 1);
+  xTaskCreatePinnedToCore(Taskhandler::BIOSTask, "core1", 5000, &myQueue1, 5, &core1, 1);
 }

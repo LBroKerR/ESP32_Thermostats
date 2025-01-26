@@ -6,8 +6,8 @@
 #include <Arduino.h>
 #include "HeatingCircleHandler.h"
 
-#define RX 3
-#define TX 1
+#define RX 17//3
+#define TX 16//1
 #define BAUDRATE 9600
 
 class modbusHandler{

@@ -66,7 +66,9 @@ int HeatingCircleHandler::Heating(float wanted_temperature){
         }
     }
     if(measuring!=nullptr){
-        temp+=measuring->getMeasuredTemperature();
+        float temp_tmp=0.0;
+        measuring->getMeasuredTemperature(&temp_tmp);
+        temp+=temp_tmp;
         size++;
     }
     if(size!=0){

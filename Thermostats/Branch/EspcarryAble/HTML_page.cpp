@@ -128,7 +128,7 @@ String HTML_page::get_page(){
         str+="<div class=\"card\">";
         for (unsigned ii = i; ii < (i+2); ii++){
             str+=data[ii].get_html_tag();
-            if(LIST_P_TAG==data[ii].get_name()){
+            if(String(LIST_P_TAG)==data[ii].get_name()){
                 str+="<ul>";
                 for (unsigned i = 0; i < number_of_listelem; i++){
                     str+=list[i].get_html_link();

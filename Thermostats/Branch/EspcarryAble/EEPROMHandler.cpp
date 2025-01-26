@@ -33,7 +33,7 @@
       }
 
       EEPROM.write(address + str.length(), '\0'); // closing 
-      EEPROM.commit();  // save to eeprom
+     // EEPROM.commit();  // save to eeprom
   }
   /// < MyreadString>
   /// !! read char from address, save it in a char array, then return it as a String
@@ -82,7 +82,7 @@ bool check_ID_datagramm(void* param){
     #if(!ESPTOUCH && ESPCARRY)
         if(id>0 ){
           EEPROM.writeUInt(HEATING_CIRLE_ID,id);
-          EEPROM.commit();
+          //EEPROM.commit();
           return true;
         }
     #endif
@@ -133,7 +133,7 @@ bool check_IP_datagramm(void* param){
         }
         host=str->toInt();
         EEPROM.writeUInt(HOST,host);
-        EEPROM.commit();
+      //  EEPROM.commit();
         return true;
     }
 
@@ -175,7 +175,7 @@ bool check_IP_datagramm(void* param){
         else{
             return false;
         }   
-        EEPROM.commit();
+       // EEPROM.commit();
         return true;
     }
 
@@ -191,7 +191,7 @@ bool check_IP_datagramm(void* param){
         temp=str->toDouble();
         if(temp>=-10 && temp <=10){
           EEPROM.writeDouble(TMPOFFSET,temp);
-          EEPROM.commit();
+        //  EEPROM.commit();
           return true;
         }
         return false;
@@ -199,7 +199,7 @@ bool check_IP_datagramm(void* param){
     bool write_out_clock(unsigned hour, unsigned min){
         EEPROM.writeUInt(HOUR, hour);
         EEPROM.writeUInt(MIN, min);
-        EEPROM.commit();
+      //  EEPROM.commit();
         return true;
     }
     bool check_clock_datagramm(void* param){
@@ -229,7 +229,7 @@ bool check_IP_datagramm(void* param){
             unsigned tmp=(unsigned)str->toInt();
             if(tmp>=0 && tmp<60){
                 EEPROM.writeUInt(HOUR, tmp);
-                EEPROM.commit();
+            //    EEPROM.commit();
                 return true;
             }
         }
@@ -244,7 +244,7 @@ bool check_IP_datagramm(void* param){
             unsigned tmp=(unsigned)str->toInt();
             if(tmp>=0 && tmp<60){
                 EEPROM.writeUInt(MIN, tmp);
-                EEPROM.commit();
+            //    EEPROM.commit();
                 return true;
             }
         }
@@ -255,7 +255,7 @@ bool check_IP_datagramm(void* param){
     bool write_out_active_program_number(unsigned param){
         if (param < 5 && param >= 0) {
             EEPROM.writeUInt(PROG, param);
-            EEPROM.commit();
+        //    EEPROM.commit();
             return true;
         }
         return false;
@@ -293,9 +293,9 @@ bool check_IP_datagramm(void* param){
                 *str="1";
                 check_ID_datagramm((void*)str);
             }*/
-            if(tmp > 0 ){//&& tmp > getID()){
+            if(tmp >= 0 ){//&& tmp > getID()){
               EEPROM.writeUInt(NUMBER_OF_HEATING_CIRLE, tmp);
-              EEPROM.commit();
+          //    EEPROM.commit();
               print(param);
               return true;
             }
@@ -309,7 +309,7 @@ bool check_IP_datagramm(void* param){
             for(unsigned i=0; i< EEPROM_SIZE; i++){
               EEPROM.writeBool(i, false);
             }
-            EEPROM.commit();
+         //   EEPROM.commit();
 #if(ESPTOUCH && !ESPCARRY)
             *str="1";
             check_ID_datagramm((void*)str);

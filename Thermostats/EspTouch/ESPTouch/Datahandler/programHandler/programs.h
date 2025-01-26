@@ -2,6 +2,10 @@
 #ifndef PROGRAMS_H
 #define PROGRAMS_H
 
+#include "float_mutex.h"
+#include "uint_mutex.h"
+#include "bool_mutex.h"
+
 #define NUMBER_OF_PROGRAM    5
 #define SIZE_OF_A_PROGRAM    24
 #define MIN_TEMP             10.0
@@ -10,19 +14,19 @@
 
 class programs{
     //espcarryable/esptouch
-    unsigned active_program_index;
+    uint_mutex active_program_index;
     bool active_program_index_changed;
 
-    unsigned ProgHour_index;
+    uint_mutex ProgHour_index;
     bool ProgHour_index_changed;
     bool active_prog_send;
 
-    float Wanted_temp;
+    float_mutex Wanted_temp;
     bool wtmp_changed;
     bool wtmp_chanded_send;
 
     //esptouch
-    bool manual_mode;
+    bool_mutex manual_mode;
     float *Programs[NUMBER_OF_PROGRAM];
     bool programs_Changed;
 
@@ -57,19 +61,19 @@ public:
     bool get_server_update_prog_index()const;
     bool get_active_program_index_changed()const;
     bool get_wtmp_changed()const;
-    bool get_manual_mode()const;
+    bool get_manual_mode(bool*);
     bool get_programs_Changed()const;
 
-    unsigned get_active_program_index()const;
-    float get_Wanted_temp()const;
+    bool get_active_program_index(unsigned*);
+    bool get_Wanted_temp(float*);
 
-    float* get_programs()const;
-    float* get_programs(unsigned index)const;
+    float* get_programs();
+    float* get_programs(unsigned index);
 
-    float get_program_element(unsigned hour)const;
-    float get_program_element()const;
+    float get_program_element(unsigned hour);
+    float get_program_element();
 
-    unsigned get_ProgHour_index()const;
+    bool get_ProgHour_index(unsigned*);
     bool get_ProgHour_index_changed()const;
 
     bool get_server_update_wtmp()const;

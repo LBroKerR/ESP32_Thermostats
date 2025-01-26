@@ -96,21 +96,24 @@ void Gui_init(){
 #endif
 }
 void is_user_interacted(DataHandler* data, unsigned *switch_of_screen){
-   if(Turn_ON_OFF && status){
-      digitalWrite(BACKLIGHT_PIN, HIGH); 
-      _ui_screen_change(&ui_Screen1, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 100, 0, &ui_Screen1_screen_init);
-      Turn_ON_OFF=false;
-      status=false;
-    }
-    else if( ts.touched() && !Turn_ON_OFF){
-      *switch_of_screen=data->getTime()->getmin()+1;
-      Turn_ON_OFF=true;
-    }
-    else if(*switch_of_screen<data->getTime()->getmin()) {
-      _ui_screen_change(&ui_Screen5, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_Screen5_screen_init);
-      digitalWrite(BACKLIGHT_PIN, LOW);  
-      status=true;
-    }
+  unsigned min=0;
+  if(data->getTime()->getmin(&min)){
+    if(Turn_ON_OFF && status){
+        digitalWrite(BACKLIGHT_PIN, HIGH); 
+        _ui_screen_change(&ui_Screen1, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 100, 0, &ui_Screen1_screen_init);
+        Turn_ON_OFF=false;
+        status=false;
+      }
+      else if( ts.touched() && !Turn_ON_OFF){
+        *switch_of_screen=min+1;
+        Turn_ON_OFF=true;
+      }
+      else if(*switch_of_screen<min) {
+        _ui_screen_change(&ui_Screen5, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_Screen5_screen_init);
+        digitalWrite(BACKLIGHT_PIN, LOW);  
+        status=true;
+      }
+  }
 }
 bool changeTask(MainTask* screens,DataHandler* data, lv_chart_series_t * ui_TmpChart_series_1, String *screen_number){
     String str="1";
@@ -133,21 +136,17 @@ bool changeTask(MainTask* screens,DataHandler* data, lv_chart_series_t * ui_TmpC
 void GuiTask_main(MainTask* screens, DataHandler* data){
   Gui_init();
   String screen_number="0";
-  unsigned switch_of_screen=data->getTime()->getmin()+1;
-  lv_chart_series_t * ui_TmpChart_series_1 = lv_chart_add_series(ui_TmpChart, lv_color_hex(0x19ACBA),LV_CHART_AXIS_PRIMARY_Y);
-  screens->init_screens_datas(data, ui_TmpChart_series_1);
-  bool task=true;
-  uint i=0;
-  while(task){
-
-      task=changeTask(screens,data,ui_TmpChart_series_1, &screen_number);
-      lv_timer_handler();
-      is_user_interacted(data, &switch_of_screen);
-      i++;
-      if(i>=1000){
-        i=0;
-      }
-      //esp_task_wdt_reset();
-    vTaskDelay(10 / portTICK_PERIOD_MS);
+  unsigned switch_of_screen=0;
+  if(data->getTime()->getmin(&switch_of_screen)){
+    switch_of_screen++;
+    lv_chart_series_t * ui_TmpChart_series_1 = lv_chart_add_series(ui_TmpChart, lv_color_hex(0x19ACBA),LV_CHART_AXIS_PRIMARY_Y);
+    screens->init_screens_datas(data, ui_TmpChart_series_1);
+    bool task=true;
+    while(task){
+        task=changeTask(screens,data,ui_TmpChart_series_1, &screen_number);
+        lv_timer_handler();
+        is_user_interacted(data, &switch_of_screen);
+      vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
   }
 }

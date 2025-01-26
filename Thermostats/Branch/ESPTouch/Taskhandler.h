@@ -12,6 +12,7 @@
 #include "DataHandler.h"
 
 #include "esp_task_wdt.h"
+//#include "esp_int_wdt.h"
 
 #include "MainTask.h"
 #include "GuiTask.h"
@@ -21,11 +22,13 @@
 #include "HeatingCommunicationTask.h"
 #include "MeasuringTask.h"
 
+#define WDT_TIMEOUT_SECONDS 60 //sec
+
 #define NUMBER_OF_TASKS_CORE1 3
 #define NUMBER_OF_TASKS_CORE0 1
 #define SCREENS 4
-#define DHTPIN 27
-#define DHTTYPE DHT11
+//#define DHTPIN 27
+//#define DHTTYPE DHT21
 
 class Taskhandler{
     static DataHandler data;
@@ -34,14 +37,16 @@ class Taskhandler{
 
     static bool end_task_on_core_0;
 
-public:
-	Taskhandler();
-    ~Taskhandler();
-
     static void BIOSTask(void*parameters);
     static void Guitask(void*parameters);
     static void initTask(void*parameters);
     static void OtherTasks(void*parameters);
+
+    void switch_wdt(bool);
+
+public:
+	Taskhandler();
+    ~Taskhandler();
 
 
     void main();

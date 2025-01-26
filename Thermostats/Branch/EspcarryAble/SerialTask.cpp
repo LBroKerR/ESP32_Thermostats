@@ -61,9 +61,11 @@ void SerialTask::functioncalling(MenuHandler*head,bool(*func)(void*)){
       }
 	  Serial.println(incomingData);
       Serial.end();delay(100);
-      EEPROM.begin(EEPROM_SIZE);delay(100);
+      //EEPROM.begin(EEPROM_SIZE);delay(100);
       output=func((void*)&incomingData);
-      EEPROM.end();delay(100);
+	  EEPROM.commit(); 
+	  delay(1000);
+      //EEPROM.end();delay(100);
       Serial.begin(BAUDRATE);delay(100);
 	  if(output){
         IO->prints(incomingData+="Call succeeded!");
@@ -104,6 +106,7 @@ void SerialTask::main() {
 	MenuHandler* tmp = nullptr;
 	tmp = menu;
   IO->printshelp();
+  EEPROM.begin(EEPROM_SIZE);delay(100);
 	while (true) {
 		if (!system(tmp)) {
 			break;
@@ -113,6 +116,7 @@ void SerialTask::main() {
 		}
     vTaskDelay(10 / portTICK_PERIOD_MS);
 	}
+	EEPROM.end();delay(100);
   Serial.end();
 	//_CrtDumpMemoryLeaks();
 }

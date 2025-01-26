@@ -8,22 +8,22 @@
 #define ESPCARRY       1  
 
 #if(ESPCARRY && !ESPTOUCH)
-    #define EEPROM_SIZE      0x0080 // 84 byte needed-> allocate 128 byte
+    #define EEPROM_SIZE      0x0080// 84 byte needed-> allocate 128 byte
     #define USER             0x0000	// wifi data addresses
     #define PW               0x0017
     #define UPSIZE           0x0015
     #define IP               0x002E
-    #define HOST             0x0040 //unsigned
+    #define HOST             0x0040//unsigned
     #define ENABLE           0x0044 // bool
     #define IPSIZE           0x0010
 
     #define HOUR             0x0045	// other data addresses // unsigned
     #define MIN              0x0049 // unsigned
     #define PROG             0x004D	//active prog // unsigned
-    #define TMPOFFSET        0x0051 //double
+    #define TMPOFFSET        0x0051//double
     #define NICKNAME         0x0059 //string
     #define NAMESIZE         0x0009
-    #define HEATING_CIRLE_ID 0x0063 //unsigned
+    #define HEATING_CIRLE_ID 0x0063//unsigned
     #define NUMBER_OF_HEATING_CIRLE 0x0067
 #endif
 #if(ESPTOUCH && !ESPCARRY)

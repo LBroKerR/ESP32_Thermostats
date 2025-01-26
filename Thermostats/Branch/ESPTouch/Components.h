@@ -15,6 +15,7 @@ class Components{
  lv_obj_t * ui_Device_TemplateName;
  lv_obj_t * ui_Temp_template;
  float temp;
+ String temp_str;
  unsigned ID;
  String IP;
 
