@@ -22,7 +22,7 @@ public:
     void set_image( unsigned index);
 
     void get_action(bool* event);
-
+    void set_action(bool const event);
     void event(lv_event_t* event);
 };
 #endif /*IMAGE_BUTTONS_H*/

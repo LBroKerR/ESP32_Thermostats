@@ -49,7 +49,7 @@ public:
     Side_Panel();
     Side_Panel(lv_obj_t * parent_panel);
     ~Side_Panel();
-    bool get_Panel_element(unsigned selector_id,image_buttons* button );
+    bool get_Panel_element(unsigned* activated_index );
 };
 
 

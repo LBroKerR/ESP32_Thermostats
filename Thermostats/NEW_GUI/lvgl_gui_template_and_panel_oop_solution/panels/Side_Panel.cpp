@@ -45,10 +45,17 @@ Side_Panel::~Side_Panel(){
     }
 }
 
-bool Side_Panel::get_Panel_element(unsigned selector_id,image_buttons* button ){
-    if(selector_id < NUMBER_OF_BUTTONS_SP){
-        *button=buttons[selector_id];
-        return true;
+bool Side_Panel::get_Panel_element(unsigned*activated_index ){
+    //if image_button action_event is true, 
+    //it's means that the button want to show it own panel on the srceen
+    //if panel showed up, then the action_event shall be false.
+
+    for(unsigned i=0; i< NUMBER_OF_BUTTONS_SP; i++){
+        if(buttons[i].get_action()){
+            activated_index=i;
+            buttons[i].set_action(false);
+            return true;
+        }
     }
     return false;
 }

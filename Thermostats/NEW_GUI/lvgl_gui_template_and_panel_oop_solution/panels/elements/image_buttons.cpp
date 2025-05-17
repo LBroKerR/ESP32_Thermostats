@@ -64,7 +64,9 @@ void image_buttons::add_image( uint8_t *image){
 
 void image_buttons::get_action(bool* event){
     *event=button_action;
-    button_action=false;
+}
+void image_buttons::set_action(bool const event){
+    button_action=event;
 }
 
 void image_buttons::event(lv_event_t* event){

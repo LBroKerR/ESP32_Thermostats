@@ -19,9 +19,13 @@
 
 #define BATTERY_IMAGE_WIDTH   80
 #define BATTERY_IMAGE_HEIGHT  40
+#define BATTERY_IMAGE_X       70 //?
+#define BATTERY_IMAGE_Y       -95 //?
 
 #define WIFI_IMAGE_WIDTH      64
 #define WIFI_IMAGE_HEIGHT     44
+#define WIFI_IMAGE_X          135 //?
+#define WIFI_IMAGE_Y          -95 //?
 
 #define HOME_IMAGE_WIDTH      BTN_IMAGE_WIDTH
 #define HOME_IMAGE_HEIGHT     BTN_IMAGE_HEIGHT
