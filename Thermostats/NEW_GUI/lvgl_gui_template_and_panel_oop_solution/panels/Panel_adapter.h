@@ -12,10 +12,10 @@ public:
     virtual bool get_Panel_elements(unsigned *selector_id)=0;
     virtual void flag_for_hide_element(bool flag)=0;
 };
-bool Panel_adapter::get_Panel_elements(unsigned selector_id){
+bool Panel_adapter::get_Panel_elements(unsigned *selector_id){
     return false;
 }
-void flag_for_hide_element(bool flag){
+void Panel_adapter::flag_for_hide_element(bool flag){
 
 }
 
